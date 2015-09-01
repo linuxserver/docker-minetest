@@ -1,7 +1,7 @@
 # set base os
 FROM linuxserver/baseimage
 
-MAINTAINER Mark Burford <sparklyballs@gmail.com>
+MAINTAINER Sparklyballs <sparklyballs@linuxserver.io>
 
 # Set correct environment variables
 ENV DEBIAN_FRONTEND=noninteractive HOME="/root" TERM=xterm LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 \
