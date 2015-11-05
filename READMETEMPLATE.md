@@ -1,26 +1,26 @@
 ![http://linuxserver.io](http://www.linuxserver.io/wp-content/uploads/2015/06/linuxserver_medium.png)
 
-The [LinuxServer.io](https://www.linuxserver.io/) team brings you another quality container release featuring auto-update on startup, easy user mapping and community support. Be sure to checkout our [forums](https://forum.linuxserver.io/index.php) or for real-time support our [IRC](https://www.linuxserver.io/index.php/irc/) on freenode at `#linuxserver.io`.
+The [LinuxServer.io](https://www.linuxserver.io/) team brings you another quality container release featuring dependency update on startup, easy user mapping and community support. Be sure to checkout our [forums](https://forum.linuxserver.io/index.php) or for real-time support our [IRC](https://www.linuxserver.io/index.php/irc/) on freenode at `#linuxserver.io`.
 
-# linuxserver/<container-name>
+# linuxserver/minetest
 
-<Provide a short, concise description of the application. No more than two SHORT paragraphs. Link to sources where possible and include an image illustrating your point if necessary. Point users to the original applications website, as that's the best place to get support - not here.>
+Minetest is a near-infinite-world block sandbox game and a game engine, inspired by InfiniMiner, Minecraft, and the like. [Minetest](http://www.minetest.net/)
 
 ## Usage
 
 ```
-docker create --name=<container-name> -v /etc/localtime:/etc/localtime:ro -v <path to data>:/config -e PGID=<gid> -e PUID=<uid>  -p 1234:1234 linuxserver/<container-name>
+docker create --name=minetest -v <path to data>:/config/.minetest -e PGID=<gid> -e PUID=<uid> -e TZ=<timezone> -p 30000:30000 linuxserver/minetest
 ```
 
 **Parameters**
 
-* `-p 4242` - the port(s)
-* `-v /etc/localtime` for timesync - *optional*
-* `-v /config` -
+* `-p 30000` - the port(s)
+* `-v /config/.minetest` - where minetest stores config files and maps etc.
 * `-e PGID` for GroupID - see below for explanation
 * `-e PUID` for UserID - see below for explanation
+* `-e TZ` for Timezone setting, eg Europe/London
 
-It is based on phusion-baseimage with ssh removed, for shell access whilst the container is running do `docker exec -it <container-name> /bin/bash`.
+It is based on phusion-baseimage with ssh removed, for shell access whilst the container is running do `docker exec -it minetest /bin/bash`.
 
 ### User / Group Identifiers
 
@@ -30,17 +30,17 @@ Part of what makes our containers work so well is by allowing you to specify you
 
 ## Setting up the application 
 
-<Insert a basic user guide here to get a n00b up and running with the software inside the container.> DELETE ME
+You can find the world maps, mods folder and config files in /config/.minetest.
 
 
 ## Updates
 
-* Upgrade to the latest version simply `docker restart <container-name>`.
-* To monitor the logs of the container in realtime `docker logs -f <container-name>`.
+* Update dependencies to the latest version simply `docker restart minetest`.
+* To monitor the logs of the container in realtime `docker logs -f minetest`.
 
 
 
 ## Versions
 
-+ **dd.MM.yyyy:** This is the standard Version type now. 
++ **05.11.2015:** Initial Release. 
 
