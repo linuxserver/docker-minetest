@@ -1,14 +1,15 @@
-# set base os
 FROM linuxserver/baseimage
 
 MAINTAINER Sparklyballs <sparklyballs@linuxserver.io>
 
-# Set correct environment variables
-ENV DEBIAN_FRONTEND=noninteractive HOME="/root" TERM=xterm LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 \
 
-MINETEST_SUBGAME_PATH="/config/.minetest/games" \
+ENV APTLIST="libbz2-dev libleveldb-dev luajit libluajit-5.1-dev libsqlite3-dev libcurl4-gnutls-dev libfreetype6-dev libhiredis0.10 libjsoncpp-dev"
+ENV BUILD_APTLIST="build-essential git-core gettext cmake doxygen libirrlicht-dev libjpeg-dev libxxf86vm-dev libogg-dev libvorbis-dev libopenal-dev zlib1g-dev libgmp-dev libpng12-dev libgl1-mesa-dev libhiredis-dev"
 
-configOPTS="-DENABLE_GETTEXT=TRUE \
+# Set environment variables
+ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 MINETEST_SUBGAME_PATH="/config/.minetest/games"
+
+ENV configOPTS="-DENABLE_GETTEXT=TRUE \
 -DENABLE_SOUND=FALSE \
 -DENABLE_LUAJIT=TRUE \
 -DENABLE_CURL=TRUE \
@@ -17,45 +18,18 @@ configOPTS="-DENABLE_GETTEXT=TRUE \
 -DENABLE_SYSTEM_GMP=TRUE \
 -DENABLE_LEVELDB=TRUE \
 -DRUN_IN_PLACE=FALSE \
--DBUILD_SERVER=TRUE " \
+-DBUILD_SERVER=TRUE "
 
-buildDeps="build-essential \
-git-core \
-gettext \
-cmake \
-doxygen \
-libirrlicht-dev \
-libjpeg-dev \
-libxxf86vm-dev \
-libogg-dev \
-libvorbis-dev \
-libopenal-dev \
-zlib1g-dev \
-libgmp-dev \
-libpng12-dev \
-libgl1-mesa-dev \
-libhiredis-dev" \
-
-buildDepsPerm="libbz2-dev \
-libleveldb-dev \
-luajit \
-libluajit-5.1-dev \
-libsqlite3-dev \
-libcurl4-gnutls-dev \
-libfreetype6-dev \
-libjsoncpp-dev" \
-
-runtimeDeps="libhiredis0.10"
 
 # Set the locale
 RUN locale-gen en_US.UTF-8 && \
 
 # update apt and install build dependencies
-apt-get update -qq && \
+apt-get update -q && \
 apt-get install \
 --no-install-recommends \
-$buildDepsPerm \
-$buildDeps -qy && \
+$APTLIST \
+$BUILD_APTLIST -qy && \
 
 # clone minitest git repository
 cd /tmp && \
@@ -69,7 +43,7 @@ $configOPTS && \
 make && \
 make install && \
 
-# copy games to temporary folder 
+# copy games to temporary folder
 mkdir -p /defaults/games && \
 cp -pr  /usr/local/share/minetest/games/* /defaults/games/ && \
 
@@ -78,21 +52,20 @@ git clone --depth 1 https://github.com/minetest/minetest_game.git /defaults/game
 
 # clean build dependencies
 apt-get purge --remove \
-$buildDeps -qy && \
+$BUILD_APTLIST -qy && \
 apt-get autoremove -y && \
 
-# install runtime dependencies
+# install runtime dependencies (makes sure we haven't deleted needed packages with removal above)
 apt-get install \
 --no-install-recommends \
-$buildDepsPerm \
-$runtimeDeps -qy && \
+$APTLIST -qy && \
 
 #clean up
 cd / && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# add some files 
+# add some files
 ADD init/ /etc/my_init.d/
 RUN chmod -v +x /etc/service/*/run /etc/my_init.d/*.sh && \
 
