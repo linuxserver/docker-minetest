@@ -2,14 +2,14 @@
 
 The [LinuxServer.io](https://www.linuxserver.io/) team brings you another quality container release featuring dependency update on startup, easy user mapping and community support. Be sure to checkout our [forums](https://forum.linuxserver.io/index.php) or for real-time support our [IRC](https://www.linuxserver.io/index.php/irc/) on freenode at `#linuxserver.io`.
 
-# linuxserver/minetest
+# lsiodev/minetest
 
 Minetest is a near-infinite-world block sandbox game and a game engine, inspired by InfiniMiner, Minecraft, and the like. [Minetest](http://www.minetest.net/)
 
 ## Usage
 
 ```
-docker create --name=minetest -v <path to data>:/config/.minetest -e PGID=<gid> -e PUID=<uid> -e TZ=<timezone> -p 30000:30000 linuxserver/minetest
+docker create --name=minetest -v <path to data>:/config/.minetest -e PGID=<gid> -e PUID=<uid> -e TZ=<timezone> -p 30000:30000 lsiodev/minetest
 ```
 
 **Parameters**
