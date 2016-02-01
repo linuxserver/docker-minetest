@@ -3,7 +3,8 @@ FROM linuxserver/baseimage
 MAINTAINER Sparklyballs <sparklyballs@linuxserver.io>
 
 
-ENV APTLIST="libbz2-dev libleveldb-dev luajit libluajit-5.1-dev libsqlite3-dev libcurl4-gnutls-dev libfreetype6-dev libhiredis0.10 libjsoncpp-dev"
+ENV APTLIST="libbz2-dev lua-socket libleveldb-dev luajit libluajit-5.1-dev libsqlite3-dev 
+libcurl4-gnutls-dev libfreetype6-dev libhiredis0.10 libjsoncpp-dev"
 ENV BUILD_APTLIST="build-essential git-core gettext cmake doxygen libirrlicht-dev libjpeg-dev libxxf86vm-dev libogg-dev libvorbis-dev libopenal-dev zlib1g-dev libgmp-dev libpng12-dev libgl1-mesa-dev libhiredis-dev"
 
 # Set environment variables
