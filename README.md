@@ -41,6 +41,7 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 
 
 ## Versions
++ **15.02.2016:** Make minetest app a service.
 + **01-02-2016:** Add lua-socket dependency.
 + **06.11.2015:** Initial Release. 
 
