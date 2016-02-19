@@ -9,12 +9,14 @@ Minetest is a near-infinite-world block sandbox game and a game engine, inspired
 ## Usage
 
 ```
-docker create --name=minetest -v <path to data>:/config/.minetest -e PGID=<gid> -e PUID=<uid> -e TZ=<timezone> -p 30000:30000 lsiodev/minetest
+docker create --name=minetest -v <path to data>:/config/.minetest \
+-e PGID=<gid> -e PUID=<uid> -e TZ=<timezone> \
+-p 30000:30000/udp lsiodev/minetest
 ```
 
 **Parameters**
 
-* `-p 30000` - the port(s)
+* `-p 30000/udp` - the port(s)
 * `-v /config/.minetest` - where minetest stores config files and maps etc.
 * `-e PGID` for GroupID - see below for explanation
 * `-e PUID` for UserID - see below for explanation
@@ -41,6 +43,7 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 
 
 ## Versions
++ **19.02.2016:** Change port to UDP, thanks to slashopt for pointing this out.
 + **15.02.2016:** Make minetest app a service.
 + **01-02-2016:** Add lua-socket dependency.
 + **06.11.2015:** Initial Release. 

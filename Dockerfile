@@ -76,5 +76,5 @@ RUN chmod -v +x /etc/service/*/run /etc/my_init.d/*.sh
 VOLUME /config/.minetest
 
 # expose port
-EXPOSE 30000
+EXPOSE 30000/udp
 
