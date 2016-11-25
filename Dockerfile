@@ -38,6 +38,10 @@ RUN \
 	python-dev \
 	sqlite-dev && \
 
+apk add --no-cache --virtual=build-dependencies \
+	--repository http://nl.alpinelinux.org/alpine/edge/testing \
+	leveldb-dev && \
+
 # install runtime packages
  apk add --no-cache \
 	curl \
@@ -50,6 +54,10 @@ RUN \
 	lua-socket \
 	sqlite \
 	sqlite-libs && \
+
+apk add --no-cache \
+	--repository http://nl.alpinelinux.org/alpine/edge/testing \
+	leveldb && \
 
 # compile spatialindex
  git clone https://github.com/libspatialindex/libspatialindex /tmp/spatialindex && \
@@ -72,6 +80,7 @@ RUN \
 	-DCUSTOM_SHAREDIR="/usr/share/minetest" \
 	-DENABLE_CURL=1 \
 	-DENABLE_GETTEXT=1 \
+	-DENABLE_LEVELDB=1 \
 	-DENABLE_LUAJIT=1 \
 	-DENABLE_REDIS=1 \
 	-DENABLE_SOUND=0 \
