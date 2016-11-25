@@ -2,15 +2,16 @@
 
 # predefine some variables
 world_part="--world "
+# shellcheck disable=SC2059
 world_set=$world
 
 # set world_string variable to use user-defined world or default world.
 if [ -z "$world" ]; then
 world_string=" "
 else
-world_string=$world_part$world_set
+world_string=($world_part$world_set)
 fi
 
 exec \
-	s6-setuidgid abc minetestserver $world_string \
+	s6-setuidgid abc minetestserver "${worldstring[@]}" \
 	--config /config/.minetest/main-config/minetest.conf --port 30000
