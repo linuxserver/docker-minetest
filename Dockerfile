@@ -1,85 +1,101 @@
-FROM linuxserver/baseimage
-
-MAINTAINER Sparklyballs <sparklyballs@linuxserver.io>
-
+FROM lsiobase/alpine
+MAINTAINER sparklyballs
 
 # set version label
 ARG BUILD_DATE
 ARG VERSION
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 
-ENV APTLIST="libbz2-dev lua-socket libleveldb-dev luajit libluajit-5.1-dev libsqlite3-dev \
-libcurl4-gnutls-dev libfreetype6-dev libhiredis0.10 libjsoncpp-dev"
+# environment variables
+ENV HOME="/config" \
+MINETEST_SUBGAME_PATH="/config/.minetest/games
 
-ENV BUILD_APTLIST="build-essential git-core gettext cmake doxygen libirrlicht-dev libjpeg-dev libxxf86vm-dev libogg-dev libvorbis-dev libopenal-dev zlib1g-dev libgmp-dev libpng12-dev libgl1-mesa-dev libhiredis-dev"
+# build variables
+ARG LDFLAGS="-lintl"
 
-# Set environment variables
-ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 MINETEST_SUBGAME_PATH="/config/.minetest/games"
+# install build packages
+RUN \
+ apk add --no-cache --virtual=build-dependencies \
+	bzip2-dev \
+	cmake \
+	curl-dev \
+	doxygen \
+	g++ \
+	gcc \
+	gettext-dev \
+	git \
+	gmp-dev \
+	hiredis-dev \
+	icu-dev \
+	irrlicht-dev \
+	libjpeg-turbo-dev \
+	libpng-dev \
+	libtool \
+	luajit-dev \
+	make \
+	openal-soft-dev \
+	openssl-dev \
+	python-dev \
+	sqlite-dev && \
 
-ENV configOPTS="-DENABLE_GETTEXT=TRUE \
--DENABLE_SOUND=FALSE \
--DENABLE_LUAJIT=TRUE \
--DENABLE_CURL=TRUE \
--DENABLE_REDIS=TRUE \
--DENABLE_GETTEXT=TRUE \
--DENABLE_SYSTEM_GMP=TRUE \
--DENABLE_LEVELDB=TRUE \
--DRUN_IN_PLACE=FALSE \
--DBUILD_SERVER=TRUE "
+# install runtime packages
+ apk add --no-cache \
+	curl \
+	gmp \
+	hiredis \
+	libgcc \
+	libintl \
+	libstdc++ \
+	luajit \
+	sqlite \
+	sqlite-libs && \
 
+# compile spatialindex
+ git clone https://github.com/libspatialindex/libspatialindex /tmp/spatialindex && \
+ cd /tmp/spatialindex && \
+ cmake . \
+	-DCMAKE_INSTALL_PREFIX=/usr && \
+ make && \
+ make install && \
 
-# Set the locale
-RUN locale-gen en_US.UTF-8 && \
+# compile minetestserver
+ git clone --depth 1 https://github.com/minetest/minetest.git /tmp/minetest && \
+ cp /tmp/minetest//minetest.conf.example /defaults/minetest.conf && \
+ cd /tmp/minetest && \
+ cmake . \
+	-DBUILD_CLIENT=0 \
+	-DBUILD_SERVER=1 \
+	-DCMAKE_INSTALL_PREFIX=/usr \
+	-DCUSTOM_BINDIR=/usr/bin \
+	-DCUSTOM_DOCDIR="/usr/share/doc/minetest" \
+	-DCUSTOM_SHAREDIR="/usr/share/minetest" \
+	-DENABLE_CURL=1 \
+	-DENABLE_GETTEXT=1 \
+	-DENABLE_LUAJIT=1 \
+	-DENABLE_REDIS=1 \
+	-DENABLE_SOUND=0 \
+	-DENABLE_SYSTEM_GMP=1 \
+	-DRUN_IN_PLACE=0 && \
+ make && \
+ make install && \
 
-# update apt and install build dependencies
-apt-get update -q && \
-apt-get install \
---no-install-recommends \
-$APTLIST \
-$BUILD_APTLIST -qy && \
+# copy games to temporary folder
+ mkdir -p \
+	/defaults/games && \
+ cp -pr  /usr/share/minetest/games/* /defaults/games/ && \
 
-# clone minitest git repository
-cd /tmp && \
-git clone --depth 1 https://github.com/minetest/minetest.git && \
-cd /tmp/minetest && \
-cp minetest.conf.example /defaults/minetest.conf && \
+# fetch additional game from git
+ git clone --depth 1 https://github.com/minetest/minetest_game.git /defaults/games/minetest && \
 
-# build and configure minitest
-cmake . \
-$configOPTS && \
-make && \
-make install && \
+# cleanup
+ apk del --purge \
+	build-dependencies && \
+ rm -rf \
+	/tmp/*
 
-# copy games to temporary folder
-mkdir -p /defaults/games && \
-cp -pr  /usr/local/share/minetest/games/* /defaults/games/ && \
+# add local files
+COPY root /
 
-# fetch additional game from git
-git clone --depth 1 https://github.com/minetest/minetest_game.git /defaults/games/minetest && \
-
-# clean build dependencies
-apt-get purge --remove \
-$BUILD_APTLIST -qy && \
-apt-get autoremove -y && \
-
-# install runtime dependencies (makes sure we haven't deleted needed packages with removal above)
-apt-get install \
---no-install-recommends \
-$APTLIST -qy && \
-
-#clean up
-cd / && \
-apt-get clean && \
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# add some files
-ADD services/ /etc/service/
-ADD init/ /etc/my_init.d/
-RUN chmod -v +x /etc/service/*/run /etc/my_init.d/*.sh
-
-# set volume
-VOLUME /config/.minetest
-
-# expose port
+# ports and volumes
 EXPOSE 30000/udp
-
+VOLUME /config/.minetest
