@@ -47,6 +47,7 @@ RUN \
 	libintl \
 	libstdc++ \
 	luajit \
+	lua-socket \
 	sqlite \
 	sqlite-libs && \
 
