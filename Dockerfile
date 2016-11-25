@@ -3,6 +3,11 @@ FROM linuxserver/baseimage
 MAINTAINER Sparklyballs <sparklyballs@linuxserver.io>
 
 
+# set version label
+ARG BUILD_DATE
+ARG VERSION
+LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+
 ENV APTLIST="libbz2-dev lua-socket libleveldb-dev luajit libluajit-5.1-dev libsqlite3-dev \
 libcurl4-gnutls-dev libfreetype6-dev libhiredis0.10 libjsoncpp-dev"
 
