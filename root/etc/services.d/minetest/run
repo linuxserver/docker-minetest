@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bash
 
 # predefine some variables
 world_part="--world "
+# shellcheck disable=SC2154
 world_set=$world
 
 # set world_string variable to use user-defined world or default world.
@@ -10,5 +11,8 @@ world_string=" "
 else
 world_string=$world_part$world_set
 fi
-exec /sbin/setuser abc minetestserver $world_string --config /config/.minetest/main-config/minetest.conf --port 30000
 
+# shellcheck disable=SC2086
+exec \
+	s6-setuidgid abc minetestserver $world_string \
+	--config /config/.minetest/main-config/minetest.conf --port 30000
