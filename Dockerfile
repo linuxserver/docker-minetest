@@ -1,4 +1,4 @@
-FROM lsiobase/alpine
+FROM lsiobase/alpine:3.5
 MAINTAINER sparklyballs
 
 # set version label
@@ -29,12 +29,15 @@ RUN \
 	icu-dev \
 	irrlicht-dev \
 	libjpeg-turbo-dev \
+	libogg-dev \
 	libpng-dev \
+	libressl-dev \
 	libtool \
+	libvorbis-dev \
 	luajit-dev \
 	make \
+	mesa-dev \
 	openal-soft-dev \
-	openssl-dev \
 	python-dev \
 	sqlite-dev && \
 
@@ -79,7 +82,6 @@ apk add --no-cache \
 	-DCUSTOM_DOCDIR="/usr/share/doc/minetest" \
 	-DCUSTOM_SHAREDIR="/usr/share/minetest" \
 	-DENABLE_CURL=1 \
-	-DENABLE_GETTEXT=1 \
 	-DENABLE_LEVELDB=1 \
 	-DENABLE_LUAJIT=1 \
 	-DENABLE_REDIS=1 \

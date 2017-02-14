@@ -75,6 +75,7 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 
 ## Versions
 
++ **14.02.2017:** Rebase to alpine 3.5.
 + **25.11.2016:** Rebase to alpine linux, move to main repo.
 + **27.02.2016:** Bump to latest version.
 + **19.02.2016:** Change port to UDP, thanks to slashopt for pointing this out.
