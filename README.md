@@ -2,6 +2,8 @@
 [forumurl]: https://forum.linuxserver.io
 [ircurl]: https://www.linuxserver.io/irc/
 [podcasturl]: https://www.linuxserver.io/podcast/
+[appurl]: http://www.minetest.net/
+[hub]: https://hub.docker.com/r/linuxserver/minetest/
 
 [![linuxserver.io](https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/linuxserver_medium.png)][linuxserverurl]
 
@@ -12,12 +14,11 @@ The [LinuxServer.io][linuxserverurl] team brings you another container release f
 
 # linuxserver/minetest
 [![](https://images.microbadger.com/badges/version/linuxserver/minetest.svg)](https://microbadger.com/images/linuxserver/minetest "Get your own version badge on microbadger.com")[![](https://images.microbadger.com/badges/image/linuxserver/minetest.svg)](http://microbadger.com/images/linuxserver/minetest "Get your own image badge on microbadger.com")[![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/minetest.svg)][hub][![Docker Stars](https://img.shields.io/docker/stars/linuxserver/minetest.svg)][hub][![Build Status](http://jenkins.linuxserver.io:8080/buildStatus/icon?job=Dockers/LinuxServer.io/linuxserver-minetest)](http://jenkins.linuxserver.io:8080/job/Dockers/job/LinuxServer.io/job/linuxserver-minetest/)
-[hub]: https://hub.docker.com/r/linuxserver/minetest/
 
-[Minetest][mineurl] (server) is a near-infinite-world block sandbox game and a game engine, inspired by InfiniMiner, Minecraft, and the like.
+[Minetest][appurl] (server) is a near-infinite-world block sandbox game and a game engine, inspired by InfiniMiner, Minecraft, and the like.
 
-[![minetest](https://raw.githubusercontent.com/linuxserver/beta-templates/master/lsiodev/img/minetest-icon.png)][mineurl]
-[mineurl]: http://www.minetest.net/
+[![minetest](https://raw.githubusercontent.com/linuxserver/beta-templates/master/lsiodev/img/minetest-icon.png)][appurl]
+
 ## Usage
 
 ```
