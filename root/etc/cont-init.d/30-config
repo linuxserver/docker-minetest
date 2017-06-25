@@ -1,17 +1,31 @@
 #!/usr/bin/with-contenv bash
 
+
 # make our folders
 mkdir -p \
 	/config/.minetest/games \
 	/config/.minetest/mods \
 	/config/.minetest/main-config
 
-if [ ! -f "/config/.minetest/main-config/minetest.conf" ]; then
-cp /defaults/minetest.conf /config/.minetest/main-config/minetest.conf
+if [ ! -f "/config/.minetest/main-config/minetest.conf.example" ]; then
+  cp /defaults/minetest.conf /config/.minetest/main-config/minetest.conf.example
+fi
+
+if [ ! -z "$default_password" ]; then
+  default_password="default_password = $default_password"
+  echo $default_password >> /config/.minetest/main-config/minetest.conf
+fi
+
+if [ -z "$game_git_repo_url" ]; then
+#Download the default minetest game
+  git clone --depth 1 https://github.com/minetest/minetest_game.git /defaults/games/minetest  
+else
+#Download subgame from its git repo
+  git clone --depth 1 "$game_git_repo_url" /defaults/games/minetest
 fi
 
 if [ ! -d "/config/.minetest/games/minimal" ]; then
-cp -pr /defaults/games/* /config/.minetest/games/
+  cp -pr /defaults/games/* /config/.minetest/games/
 fi
 
 # permissions
