@@ -8,7 +8,7 @@ LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DA
 
 # environment variables
 ENV HOME="/config" \
-MINETEST_SUBGAME_PATH="/config/.minetest/games
+MINETEST_SUBGAME_PATH="/config/.minetest/games"
 
 # build variables
 ARG LDFLAGS="-lintl"
