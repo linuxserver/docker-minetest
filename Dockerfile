@@ -56,6 +56,7 @@ apk add --no-cache --virtual=build-dependencies \
 	luajit \
 	lua-socket \
 	sqlite \
+	git \
 	sqlite-libs && \
 
 apk add --no-cache \
@@ -95,9 +96,6 @@ apk add --no-cache \
  mkdir -p \
 	/defaults/games && \
  cp -pr  /usr/share/minetest/games/* /defaults/games/ && \
-
-# fetch additional game from git
- git clone --depth 1 https://github.com/minetest/minetest_game.git /defaults/games/minetest && \
 
 # cleanup
  apk del --purge \
