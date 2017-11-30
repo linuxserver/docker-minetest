@@ -67,7 +67,20 @@ apk add --no-cache \
  cd /tmp/spatialindex && \
  cmake . \
 	-DCMAKE_INSTALL_PREFIX=/usr && \
- make && \
+# attempt to set number of cores available for make to use
+ set -ex && \
+ CPU_CORES=$( < /proc/cpuinfo grep -c processor ) || echo "failed cpu look up" && \
+ if echo $CPU_CORES | grep -E  -q '^[0-9]+$'; then \
+	: ;\
+ if [ "$CPU_CORES" -gt 7 ]; then \
+	CPU_CORES=$(( CPU_CORES  - 3 )); \
+ elif [ "$CPU_CORES" -gt 5 ]; then \
+	CPU_CORES=$(( CPU_CORES  - 2 )); \
+ elif [ "$CPU_CORES" -gt 3 ]; then \
+	CPU_CORES=$(( CPU_CORES  - 1 )); fi \
+ else CPU_CORES="1"; fi && \
+
+ make -j $CPU_CORES && \
  make install && \
 
 # compile minetestserver
@@ -88,7 +101,8 @@ apk add --no-cache \
 	-DENABLE_SOUND=0 \
 	-DENABLE_SYSTEM_GMP=1 \
 	-DRUN_IN_PLACE=0 && \
- make && \
+ make -j $CPU_CORES && \
+ set +ex && \
  make install && \
 
 # copy games to temporary folder

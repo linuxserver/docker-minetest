@@ -76,11 +76,12 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 
 ## Versions
 
-+ **26.05.2017:** Rebase to alpine 3.6.
-+ **14.02.2017:** Rebase to alpine 3.5.
-+ **25.11.2016:** Rebase to alpine linux, move to main repo.
-+ **27.02.2016:** Bump to latest version.
-+ **19.02.2016:** Change port to UDP, thanks to slashopt for pointing this out.
-+ **15.02.2016:** Make minetest app a service.
-+ **01-02-2016:** Add lua-socket dependency.
-+ **06.11.2015:** Initial Release. 
++ **30.11.17:** Use cpu core counting routine to speed up build time.
++ **26.05.17:** Rebase to alpine 3.6.
++ **14.02.17:** Rebase to alpine 3.5.
++ **25.11.16:** Rebase to alpine linux, move to main repo.
++ **27.02.16:** Bump to latest version.
++ **19.02.16:** Change port to UDP, thanks to slashopt for pointing this out.
++ **15.02.16:** Make minetest app a service.
++ **01.02.16:** Add lua-socket dependency.
++ **06.11.15:** Initial Release. 
