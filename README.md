@@ -76,6 +76,7 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 
 ## Versions
 
++ **30.11.17:** Use cpu core counting routine to speed up build time.
 + **26.05.2017:** Rebase to alpine 3.6.
 + **14.02.2017:** Rebase to alpine 3.5.
 + **25.11.2016:** Rebase to alpine linux, move to main repo.
