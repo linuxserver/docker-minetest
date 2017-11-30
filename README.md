@@ -83,5 +83,5 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 + **27.02.16:** Bump to latest version.
 + **19.02.16:** Change port to UDP, thanks to slashopt for pointing this out.
 + **15.02.16:** Make minetest app a service.
-+ **01-02-16:** Add lua-socket dependency.
++ **01.02.16:** Add lua-socket dependency.
 + **06.11.15:** Initial Release. 
