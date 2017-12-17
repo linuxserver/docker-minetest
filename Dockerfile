@@ -1,10 +1,10 @@
-FROM lsiobase/alpine:3.6
-MAINTAINER sparklyballs
+FROM lsiobase/alpine:3.7
 
 # set version label
 ARG BUILD_DATE
 ARG VERSION
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="sparklyballs"
 
 # environment variables
 ENV HOME="/config" \
@@ -13,8 +13,8 @@ MINETEST_SUBGAME_PATH="/config/.minetest/games"
 # build variables
 ARG LDFLAGS="-lintl"
 
-# install build packages
 RUN \
+ echo "**** install build packages ****" && \
  apk add --no-cache --virtual=build-dependencies \
 	bzip2-dev \
 	cmake \
@@ -40,12 +40,10 @@ RUN \
 	openal-soft-dev \
 	python-dev \
 	sqlite-dev && \
-
-apk add --no-cache --virtual=build-dependencies \
+ apk add --no-cache --virtual=build-dependencies \
 	--repository http://nl.alpinelinux.org/alpine/edge/testing \
 	leveldb-dev && \
-
-# install runtime packages
+ echo "**** install runtime packages ****" && \
  apk add --no-cache \
 	curl \
 	gmp \
@@ -57,17 +55,15 @@ apk add --no-cache --virtual=build-dependencies \
 	lua-socket \
 	sqlite \
 	sqlite-libs && \
-
-apk add --no-cache \
+ apk add --no-cache \
 	--repository http://nl.alpinelinux.org/alpine/edge/testing \
 	leveldb && \
-
-# compile spatialindex
+ echo "**** compile spatialindex ****" && \
  git clone https://github.com/libspatialindex/libspatialindex /tmp/spatialindex && \
  cd /tmp/spatialindex && \
  cmake . \
 	-DCMAKE_INSTALL_PREFIX=/usr && \
-# attempt to set number of cores available for make to use
+ echo "**** attempt to set number of cores available for make to use ****" && \
  set -ex && \
  CPU_CORES=$( < /proc/cpuinfo grep -c processor ) || echo "failed cpu look up" && \
  if echo $CPU_CORES | grep -E  -q '^[0-9]+$'; then \
@@ -79,11 +75,9 @@ apk add --no-cache \
  elif [ "$CPU_CORES" -gt 3 ]; then \
 	CPU_CORES=$(( CPU_CORES  - 1 )); fi \
  else CPU_CORES="1"; fi && \
-
  make -j $CPU_CORES && \
  make install && \
-
-# compile minetestserver
+ echo "**** compile minetestserver ****" && \
  git clone --depth 1 https://github.com/minetest/minetest.git /tmp/minetest && \
  cp /tmp/minetest//minetest.conf.example /defaults/minetest.conf && \
  cd /tmp/minetest && \
@@ -104,16 +98,13 @@ apk add --no-cache \
  make -j $CPU_CORES && \
  set +ex && \
  make install && \
-
-# copy games to temporary folder
+ echo "**** copy games to temporary folder ****" && \
  mkdir -p \
 	/defaults/games && \
  cp -pr  /usr/share/minetest/games/* /defaults/games/ && \
-
-# fetch additional game from git
+ echo "**** fetch additional game from git ****" && \
  git clone --depth 1 https://github.com/minetest/minetest_game.git /defaults/games/minetest && \
-
-# cleanup
+ echo "**** cleanup ****" && \
  apk del --purge \
 	build-dependencies && \
  rm -rf \
