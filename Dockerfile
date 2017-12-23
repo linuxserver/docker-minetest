@@ -78,7 +78,7 @@ RUN \
  make -j $CPU_CORES && \
  make install && \
  echo "**** compile minetestserver ****" && \
- git clone --depth 1 https://github.com/minetest/minetest.git /tmp/minetest && \
+ git clone --branch 0.4.16 --depth 1 https://github.com/minetest/minetest.git /tmp/minetest && \
  cp /tmp/minetest//minetest.conf.example /defaults/minetest.conf && \
  cd /tmp/minetest && \
  cmake . \
@@ -103,7 +103,7 @@ RUN \
 	/defaults/games && \
  cp -pr  /usr/share/minetest/games/* /defaults/games/ && \
  echo "**** fetch additional game from git ****" && \
- git clone --depth 1 https://github.com/minetest/minetest_game.git /defaults/games/minetest && \
+ git clone --branch 0.4.16 --depth 1 https://github.com/minetest/minetest_game.git /defaults/games/minetest && \
  echo "**** cleanup ****" && \
  apk del --purge \
 	build-dependencies && \
