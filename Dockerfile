@@ -6,7 +6,7 @@ ARG VERSION
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="sparklyballs"
 
-# environment variables
+# environment variables
 ENV HOME="/config" \
 MINETEST_SUBGAME_PATH="/config/.minetest/games"
 
@@ -63,19 +63,7 @@ RUN \
  cd /tmp/spatialindex && \
  cmake . \
 	-DCMAKE_INSTALL_PREFIX=/usr && \
- echo "**** attempt to set number of cores available for make to use ****" && \
- set -ex && \
- CPU_CORES=$( < /proc/cpuinfo grep -c processor ) || echo "failed cpu look up" && \
- if echo $CPU_CORES | grep -E  -q '^[0-9]+$'; then \
-	: ;\
- if [ "$CPU_CORES" -gt 7 ]; then \
-	CPU_CORES=$(( CPU_CORES  - 3 )); \
- elif [ "$CPU_CORES" -gt 5 ]; then \
-	CPU_CORES=$(( CPU_CORES  - 2 )); \
- elif [ "$CPU_CORES" -gt 3 ]; then \
-	CPU_CORES=$(( CPU_CORES  - 1 )); fi \
- else CPU_CORES="1"; fi && \
- make -j $CPU_CORES && \
+ make && \
  make install && \
  echo "**** compile minetestserver ****" && \
  git clone --depth 1 https://github.com/minetest/minetest.git /tmp/minetest && \
@@ -95,8 +83,7 @@ RUN \
 	-DENABLE_SOUND=0 \
 	-DENABLE_SYSTEM_GMP=1 \
 	-DRUN_IN_PLACE=0 && \
- make -j $CPU_CORES && \
- set +ex && \
+ make && \
  make install && \
  echo "**** copy games to temporary folder ****" && \
  mkdir -p \
@@ -110,9 +97,9 @@ RUN \
  rm -rf \
 	/tmp/*
 
-# add local files
+# add local files
 COPY root /
 
-# ports and volumes
+# ports and volumes
 EXPOSE 30000/udp
 VOLUME /config/.minetest
