@@ -31,13 +31,15 @@ docker create \
 ```
 
 ## Tags
-Client and server must be the same version and to allow this you can choose one of the following tags 
+Client and server must be the same version and to allow this you can choose one of the following tags in the following format
 
-( the default aka :latest is equivalent to the unstable ppa version)
+linuxserver/minetest:0.4.16
 
 + **0.4.14**
 + **0.4.15**
 + **0.4.16**
+
+( the default aka :latest is equivalent to the unstable ppa version)
 
 
 ## Parameters
