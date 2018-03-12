@@ -30,7 +30,7 @@ docker create \
   linuxserver/minetest
 ```
 
-#### Tags
+## Tags
 Client and server must be the same version and to allow this you can choose one of the following tags (:latest is equivalent to the unstable ppa version)
 
 + ** 0.4.14 **
