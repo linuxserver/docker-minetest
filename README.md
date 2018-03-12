@@ -39,7 +39,7 @@ linuxserver/minetest:0.4.16
 + **0.4.15**
 + **0.4.16**
 
-( the default aka :latest is equivalent to the unstable ppa version)
+The default aka :latest is equivalent to the unstable ppa version.
 
 
 ## Parameters
