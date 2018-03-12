@@ -35,6 +35,7 @@ Client and server must be the same version and to allow this you can choose one 
 
 linuxserver/minetest:0.4.16
 
++ **0.4.13**
 + **0.4.14**
 + **0.4.15**
 + **0.4.16**
