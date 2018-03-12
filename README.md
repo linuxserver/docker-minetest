@@ -35,9 +35,9 @@ Client and server must be the same version and to allow this you can choose one 
 
 ( the default aka :latest is equivalent to the unstable ppa version)
 
-+ ** 0.4.14 **
-+ ** 0.4.15 **
-+ ** 0.4.16 **
++ **0.4.14**
++ **0.4.15**
++ **0.4.16**
 
 
 ## Parameters
