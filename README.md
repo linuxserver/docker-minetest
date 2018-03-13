@@ -30,6 +30,19 @@ docker create \
   linuxserver/minetest
 ```
 
+## Tags
+Client and server must be the same version and to allow this you can choose one of the following tags in the following format
+
+linuxserver/minetest:0.4.16
+
++ **0.4.13**
++ **0.4.14**
++ **0.4.15**
++ **0.4.16**
+
+The default aka :latest is equivalent to the unstable ppa version.
+
+
 ## Parameters
 
 `The parameters are split into two halves, separated by a colon, the left hand side representing the host and the right the container side. 
