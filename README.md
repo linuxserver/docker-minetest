@@ -40,7 +40,7 @@ linuxserver/minetest:0.4.16
 + **0.4.15**
 + **0.4.16**
 
-The default aka :latest is equivalent to the unstable ppa version.
+The default aka :latest is the latest release [from here](https://github.com/minetest/minetest/releases) ,(at time of build).
 
 
 ## Parameters
@@ -89,6 +89,7 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 
 ## Versions
 
++ **12.06.18:** Build from release tag as currently master doesn't build in alpine.
 + **03.01.18:** Deprecate cpu_core routine lack of scaling.
 + **08.12.17:** Rebase to alpine 3.7.
 + **30.11.17:** Use cpu core counting routine to speed up build time.

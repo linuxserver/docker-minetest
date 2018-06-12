@@ -66,7 +66,16 @@ RUN \
  make && \
  make install && \
  echo "**** compile minetestserver ****" && \
- git clone --depth 1 https://github.com/minetest/minetest.git /tmp/minetest && \
+ mkdir -p \
+	/tmp/minetest && \
+ MINE_TAG=$(curl -sX GET "https://api.github.com/repos/minetest/minetest/releases/latest" \
+	| awk '/tag_name/{print $4;exit}' FS='[""]') && \
+ curl -o \
+ /tmp/minetest-src.tar.gz -L \
+	"https://github.com/minetest/minetest/archive/$MINE_TAG.tar.gz" && \
+ tar xf \
+ /tmp/minetest-src.tar.gz -C \
+	/tmp/minetest --strip-components=1 && \
  cp /tmp/minetest//minetest.conf.example /defaults/minetest.conf && \
  cd /tmp/minetest && \
  cmake . \
