@@ -98,12 +98,18 @@ RUN \
  mkdir -p \
 	/defaults/games && \
  cp -pr  /usr/share/minetest/games/* /defaults/games/ && \
+ echo "**** split after 3rd dot if it exists in minetest tag variable ****" && \
+ echo "**** so we fetch game version x.x.x etc ****" && \
+ if \
+	[ $(echo "$MINETEST_TAG" | tr -cd '.' | wc -c) = 3 ] ; \
+	then MINETEST_TAG=${MINETEST_TAG%.*}; \
+ fi && \
  echo "**** fetch additional game ****" && \
  mkdir -p \
 	/defaults/games/minetest && \
  curl -o \
  /tmp/minetest-game.tar.gz -L \
-	"https://github.com/minetest/minetest_game/archive/${MINETEST_TAG%.*}.tar.gz" && \
+	"https://github.com/minetest/minetest_game/archive/${MINETEST_TAG}.tar.gz" && \
  tar xf \
  /tmp/minetest-game.tar.gz -C \
 	/defaults/games/minetest --strip-components=1 && \
