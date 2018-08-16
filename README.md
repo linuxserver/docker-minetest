@@ -40,7 +40,7 @@ linuxserver/minetest:0.4.16
 + **0.4.15**
 + **0.4.16**
 
-The default aka :latest is equivalent to the unstable ppa version.
+The default aka :latest builds whatever is the latest relaease at buildtime from here https://github.com/minetest/minetest/releases
 
 
 ## Parameters
