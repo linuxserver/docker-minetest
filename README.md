@@ -45,7 +45,7 @@ The default aka :latest builds whatever is the latest release at build time, fro
 
 ## Parameters
 
-`The parameters are split into two halves, separated by a colon, the left hand side representing the host and the right the container side. 
+`The parameters are split into two halves, separated by a colon, the left hand side representing the host and the right the container side.
 For example with a port -p external:internal - what this shows is the port mapping from internal to external of the container.
 So -p 8080:80 would expose port 80 from inside the container to be accessible from the host's IP on port 8080
 http://192.168.x.x:8080 would show you what's running INSIDE the container on port 80.`
@@ -79,7 +79,7 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 * Shell access whilst the container is running: `docker exec -it minetest /bin/bash`
 * To monitor the logs of the container in realtime: `docker logs -f minetest`
 
-* container version number 
+* container version number
 
 `docker inspect -f '{{ index .Config.Labels "build_version" }}' minetest`
 
@@ -89,6 +89,7 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 
 ## Versions
 
++ **14.01.19:** Add pipeline logic and multi arch.
 + **08.08.18:** Rebase to alpine 3.8, build from latest release tag instead of master.
 + **03.01.18:** Deprecate cpu_core routine lack of scaling.
 + **08.12.17:** Rebase to alpine 3.7.
@@ -100,4 +101,4 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 + **19.02.16:** Change port to UDP, thanks to slashopt for pointing this out.
 + **15.02.16:** Make minetest app a service.
 + **01.02.16:** Add lua-socket dependency.
-+ **06.11.15:** Initial Release. 
++ **06.11.15:** Initial Release.
