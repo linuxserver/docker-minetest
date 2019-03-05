@@ -1,4 +1,4 @@
-FROM lsiobase/alpine:3.8
+FROM lsiobase/alpine:3.9
 
 # set version label
 ARG BUILD_DATE
@@ -89,6 +89,8 @@ RUN \
 	-DCUSTOM_DOCDIR="/usr/share/doc/minetest" \
 	-DCUSTOM_SHAREDIR="/usr/share/minetest" \
 	-DENABLE_CURL=1 \
+	-DENABLE_FREETYPE=1 \
+	-DENABLE_GETTEXT=0 \
 	-DENABLE_LEVELDB=1 \
 	-DENABLE_LUAJIT=1 \
 	-DENABLE_REDIS=1 \
