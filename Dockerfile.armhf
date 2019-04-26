@@ -42,7 +42,7 @@ RUN \
 	python-dev \
 	sqlite-dev && \
  apk add --no-cache --virtual=build-dependencies \
-	--repository http://nl.alpinelinux.org/alpine/edge/testing \
+	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
 	leveldb-dev && \
  echo "**** install runtime packages ****" && \
  apk add --no-cache \
@@ -57,14 +57,14 @@ RUN \
 	sqlite \
 	sqlite-libs && \
  apk add --no-cache \
-	--repository http://nl.alpinelinux.org/alpine/edge/testing \
+	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
 	leveldb && \
  echo "**** compile spatialindex ****" && \
  git clone https://github.com/libspatialindex/libspatialindex /tmp/spatialindex && \
  cd /tmp/spatialindex && \
  cmake . \
 	-DCMAKE_INSTALL_PREFIX=/usr && \
- make && \
+ make -j 2 && \
  make install && \
  echo "**** compile minetestserver ****" && \
  if [ -z ${MINETEST_RELEASE+x} ]; then \
@@ -97,7 +97,7 @@ RUN \
 	-DENABLE_SOUND=0 \
 	-DENABLE_SYSTEM_GMP=1 \
 	-DRUN_IN_PLACE=0 && \
- make && \
+ make -j 2 && \
  make install && \
  echo "**** copy games to temporary folder ****" && \
  mkdir -p \
