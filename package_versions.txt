@@ -9,7 +9,7 @@ coreutils-8.30-r0
 curl-7.64.0-r1
 gmp-6.1.2-r1
 hiredis-0.14.0-r0
-leveldb-1.20-r1
+leveldb-1.21-r0
 libacl-2.2.52-r5
 libattr-2.4.47-r7
 libc-utils-0.7.1-r0
@@ -37,7 +37,7 @@ snappy-1.1.7-r1
 sqlite-3.26.0-r3
 sqlite-libs-3.26.0-r3
 ssl_client-1.29.3-r10
-tzdata-2018i-r0
+tzdata-2019a-r0
 xz-5.2.4-r0
 xz-libs-5.2.4-r0
 zlib-1.2.11-r1
