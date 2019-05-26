@@ -8,14 +8,14 @@ GAMEID_PART="--gameid "
 WORLD_SET=$WORLD
 GAMEID_SET=$GAMEID
 
-# set world_string variable to use user-defined world or default world.
+# set WORLD_STRING variable to use user-defined world or default world.
 if [ -z "$WORLD" ]; then
 WORLD_STRING=" "
 else
 WORLD_STRING=$wWORLD_PART$WORLD_SET
 fi
 
-# set world_string variable to use user-defined world or default world.
+# set GAMEID_STRING variable to use user-defined Gameid.
 if [ -z "$GAMEID" ]; then
 GAMEID_STRING=" "
 else
