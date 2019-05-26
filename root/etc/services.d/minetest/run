@@ -1,9 +1,12 @@
 #!/usr/bin/with-contenv bash
 
 # predefine some variables
-world_part="--world "
+world_part="--worldname "
+gameid_part="--gameid "
+
 # shellcheck disable=SC2154
 world_set=$world
+gameid_set=$gameid
 
 # set world_string variable to use user-defined world or default world.
 if [ -z "$world" ]; then
@@ -12,7 +15,14 @@ else
 world_string=$world_part$world_set
 fi
 
+# set world_string variable to use user-defined world or default world.
+if [ -z "$gameid" ]; then
+gameid_string=" "
+else
+gameid_string=$gameid_part$gameid_set
+fi
+
 # shellcheck disable=SC2086
 exec \
-	s6-setuidgid abc minetestserver $world_string \
+	s6-setuidgid abc minetestserver $world_string $gameid_string \
 	--config /config/.minetest/main-config/minetest.conf --port 30000
