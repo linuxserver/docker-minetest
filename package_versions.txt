@@ -9,7 +9,7 @@ coreutils-8.30-r0
 curl-7.64.0-r1
 gmp-6.1.2-r1
 hiredis-0.14.0-r0
-leveldb-1.21-r0
+leveldb-1.22-r0
 libacl-2.2.52-r5
 libattr-2.4.47-r7
 libc-utils-0.7.1-r0
