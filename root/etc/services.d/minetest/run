@@ -12,7 +12,7 @@ GAMEID_SET=$GAMEID
 if [ -z "$WORLD" ]; then
 WORLD_STRING=" "
 else
-WORLD_STRING=$wWORLD_PART$WORLD_SET
+WORLD_STRING=$WORLD_PART$WORLD_SET
 fi
 
 # set GAMEID_STRING variable to use user-defined Gameid.
