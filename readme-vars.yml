@@ -23,8 +23,6 @@ param_container_name: "{{ project_name }}"
 param_usage_include_net: false
 param_usage_include_env: true
 param_env_vars:
-  - { env_var: "GAMEID", env_value: "Europe/London", desc: "Specify a gameid to use." }
-  - { env_var: "WORLD", env_value: "Europe/London", desc: "Specify a world to use." }
   - { env_var: "TZ", env_value: "Europe/London", desc: "Specify a timezone to use EG Europe/London." }
 param_usage_include_vols: true
 param_volumes:
@@ -36,12 +34,10 @@ param_device_map: false
 cap_add_param: false
 
 # optional container parameters
-opt_param_usage_include_env: false
-opt_param_usage_include_vols: false
-opt_param_usage_include_ports: false
-opt_param_device_map: false
-opt_cap_add_param: false
-optional_block_1: false
+opt_param_usage_include_env: true
+opt_param_env_vars:
+  - { env_var: "CLI_ARGS", env_value: "\"--gameid minetest\"", desc: "Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with" }
+
 
 # application setup block
 app_setup_block_enabled: true
@@ -53,8 +49,7 @@ app_setup_block: |
   https://hub.docker.com/r/linuxserver/{{ project_name }}/tags
 # changelog
 changelogs:
-
-  - { date: "26.05.19:", desc: "Add GAMEID environmental variable and document WORLD environmental variable." }
+  - { date: "03.06.19:", desc: "Adding custom cli vars to options." }
   - { date: "23.03.19:", desc: "Switching to new Base images, shift to arm32v7 tag." }
   - { date: "04.03.19:", desc: "Rebase to alpine 3.9 to compile 5.0.0 minetest with new build args." }
   - { date: "14.01.19:", desc: "Add pipeline logic and multi arch." }
