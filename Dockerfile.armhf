@@ -41,7 +41,7 @@ RUN \
 	openal-soft-dev \
 	python-dev \
 	sqlite-dev && \
- apk add --no-cache --virtual=build-dependencies-10 \
+ apk add --no-cache --virtual=build-dependencies-2 \
 	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
 	leveldb-dev && \
  echo "**** install runtime packages ****" && \
