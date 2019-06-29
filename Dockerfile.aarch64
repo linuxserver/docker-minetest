@@ -1,4 +1,4 @@
-FROM lsiobase/alpine:arm64v8-3.9
+FROM lsiobase/alpine:arm64v8-3.10
 
 # set version label
 ARG BUILD_DATE
@@ -41,7 +41,7 @@ RUN \
 	openal-soft-dev \
 	python-dev \
 	sqlite-dev && \
- apk add --no-cache --virtual=build-dependencies \
+ apk add --no-cache --virtual=build-dependencies-2 \
 	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
 	leveldb-dev && \
  echo "**** install runtime packages ****" && \
@@ -121,6 +121,8 @@ RUN \
  echo "**** cleanup ****" && \
  apk del --purge \
 	build-dependencies && \
+ apk del --purge \
+	build-dependencies-2 && \
  rm -rf \
 	/tmp/*
 
