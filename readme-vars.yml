@@ -49,6 +49,7 @@ app_setup_block: |
   https://hub.docker.com/r/linuxserver/{{ project_name }}/tags
 # changelog
 changelogs:
+  - { date: "28.06.19:", desc: "Rebasing to alpine 3.10." }
   - { date: "03.06.19:", desc: "Adding custom cli vars to options." }
   - { date: "23.03.19:", desc: "Switching to new Base images, shift to arm32v7 tag." }
   - { date: "04.03.19:", desc: "Rebase to alpine 3.9 to compile 5.0.0 minetest with new build args." }
