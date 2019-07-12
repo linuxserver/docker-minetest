@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
 
 exec \
-	s6-setuidgid abc minetestserver "${CLI_ARGS}" \
+	s6-setuidgid abc minetestserver ${CLI_ARGS} \
 	--config /config/.minetest/main-config/minetest.conf --port 30000
