@@ -212,6 +212,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **19.12.19:** - Rebasing to alpine 3.11.
 * **12.07.19:** - Bugfix to support multiple CLI variables.
 * **28.06.19:** - Rebasing to alpine 3.10.
 * **03.06.19:** - Adding custom cli vars to options.
