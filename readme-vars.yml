@@ -49,6 +49,7 @@ app_setup_block: |
   https://hub.docker.com/r/linuxserver/{{ project_name }}/tags
 # changelog
 changelogs:
+  - { date: "19.12.19:", desc: "Rebasing to alpine 3.11." }
   - { date: "12.07.19:", desc: "Bugfix to support multiple CLI variables." }
   - { date: "28.06.19:", desc: "Rebasing to alpine 3.10." }
   - { date: "03.06.19:", desc: "Adding custom cli vars to options." }
