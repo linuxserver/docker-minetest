@@ -38,6 +38,7 @@ RUN \
 	luajit-dev \
 	make \
 	mesa-dev \
+	ncurses-dev \
 	openal-soft-dev \
 	python3-dev \
 	sqlite-dev && \
