@@ -1,4 +1,4 @@
-FROM lsiobase/alpine:3.11
+FROM lsiobase/alpine:3.12
 
 # set version label
 ARG BUILD_DATE
@@ -39,7 +39,7 @@ RUN \
 	make \
 	mesa-dev \
 	openal-soft-dev \
-	python-dev \
+	python3-dev \
 	sqlite-dev && \
  apk add --no-cache --virtual=build-dependencies-2 \
 	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
