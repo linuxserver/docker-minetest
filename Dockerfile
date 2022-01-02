@@ -41,6 +41,9 @@ RUN \
 	ncurses-dev \
 	openal-soft-dev \
 	python3-dev \
+	postgresql-dev \
+	postgresql-libs \
+	postgresql-client \
 	sqlite-dev && \
  apk add --no-cache --virtual=build-dependencies-2 \
 	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
@@ -55,6 +58,8 @@ RUN \
 	libstdc++ \
 	luajit \
 	lua-socket \
+	postgresql-libs \
+	postgresql-client \
 	sqlite \
 	sqlite-libs && \
  apk add --no-cache \
@@ -65,8 +70,15 @@ RUN \
  cd /tmp/spatialindex && \
  cmake . \
 	-DCMAKE_INSTALL_PREFIX=/usr && \
- make -j 2 && \
+ make -j 6 && \
  make install && \
+ echo "**** compile prometheus-cpp ****" && \
+	git clone --recursive https://github.com/jupp0r/prometheus-cpp && \
+	mkdir prometheus-cpp/build && \
+	cd prometheus-cpp/build && \
+	cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release -DENABLE_TESTING=0 && \
+	make -j$(nproc) && \
+	make install && \
  echo "**** compile minetestserver ****" && \
  if [ -z ${MINETEST_RELEASE+x} ]; then \
 	MINETEST_RELEASE=$(curl -sX GET "https://api.github.com/repos/minetest/minetest/releases/latest" \
@@ -96,9 +108,10 @@ RUN \
 	-DENABLE_LUAJIT=1 \
 	-DENABLE_REDIS=1 \
 	-DENABLE_SOUND=0 \
+	-DENABLE_PROMETHEUS=1 \
 	-DENABLE_SYSTEM_GMP=1 \
 	-DRUN_IN_PLACE=0 && \
- make -j 2 && \
+ make -j 6 && \
  make install && \
  echo "**** copy games to temporary folder ****" && \
  mkdir -p \
