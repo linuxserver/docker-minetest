@@ -1,11 +1,11 @@
-FROM ghcr.io/linuxserver/baseimage-alpine:3.12
+FROM ghcr.io/linuxserver/baseimage-alpine:3.15
 
 # set version label
 ARG BUILD_DATE
 ARG VERSION
 ARG MINETEST_RELEASE
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
-LABEL maintainer="sparklyballs"
+LABEL maintainer="aptalca"
 
 # environment variables
 ENV HOME="/config" \
@@ -29,6 +29,8 @@ RUN \
 	hiredis-dev \
 	icu-dev \
 	irrlicht-dev \
+	jq \
+	leveldb-dev \
 	libjpeg-turbo-dev \
 	libogg-dev \
 	libpng-dev \
@@ -42,9 +44,6 @@ RUN \
 	openal-soft-dev \
 	python3-dev \
 	sqlite-dev && \
- apk add --no-cache --virtual=build-dependencies-2 \
-	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
-	leveldb-dev && \
  echo "**** install runtime packages ****" && \
  apk add --no-cache \
 	curl \
@@ -69,8 +68,8 @@ RUN \
  make install && \
  echo "**** compile minetestserver ****" && \
  if [ -z ${MINETEST_RELEASE+x} ]; then \
-	MINETEST_RELEASE=$(curl -sX GET "https://api.github.com/repos/minetest/minetest/releases/latest" \
-	| awk '/tag_name/{print $4;exit}' FS='[""]'); \
+	MINETEST_RELEASE=$(curl -sX GET "https://api.github.com/repos/minetest/minetest/releases" \
+	| jq -r 'first(.[] | select(.tag_name | contains("android") | not)) | .tag_name'); \
  fi && \
  mkdir -p \
 	/tmp/minetest && \
@@ -122,8 +121,6 @@ RUN \
  echo "**** cleanup ****" && \
  apk del --purge \
 	build-dependencies && \
- apk del --purge \
-	build-dependencies-2 && \
  rm -rf \
 	/tmp/*
 
