@@ -17,9 +17,8 @@ pipeline {
     GITLAB_TOKEN=credentials('b6f0f1dd-6952-4cf6-95d1-9c06380283f0')
     GITLAB_NAMESPACE=credentials('gitlab-namespace-id')
     SCARF_TOKEN=credentials('scarf_api_key')
-    EXT_GIT_BRANCH = 'master'
-    EXT_USER = 'minetest'
-    EXT_REPO = 'minetest'
+    JSON_URL = 'https://api.github.com/repos/minetest/minetest/releases'
+    JSON_PATH = 'first(.[] | select(.tag_name | contains("android") | not)) | .tag_name'
     BUILD_VERSION_ARG = 'MINETEST_RELEASE'
     LS_USER = 'linuxserver'
     LS_REPO = 'docker-minetest'
@@ -102,21 +101,14 @@ pipeline {
     /* ########################
        External Release Tagging
        ######################## */
-    // If this is a stable github release use the latest endpoint from github to determine the ext tag
-    stage("Set ENV github_stable"){
+    // If this is a custom json endpoint parse the return to get external tag
+    stage("Set ENV custom_json"){
      steps{
        script{
          env.EXT_RELEASE = sh(
-           script: '''curl -H "Authorization: token ${GITHUB_TOKEN}" -s https://api.github.com/repos/${EXT_USER}/${EXT_REPO}/releases/latest | jq -r '. | .tag_name' ''',
+           script: '''curl -s ${JSON_URL} | jq -r ". | ${JSON_PATH}" ''',
            returnStdout: true).trim()
-       }
-     }
-    }
-    // If this is a stable or devel github release generate the link for the build message
-    stage("Set ENV github_link"){
-     steps{
-       script{
-         env.RELEASE_LINK = 'https://github.com/' + env.EXT_USER + '/' + env.EXT_REPO + '/releases/tag/' + env.EXT_RELEASE
+         env.RELEASE_LINK = env.JSON_URL
        }
      }
     }
@@ -128,12 +120,11 @@ pipeline {
             script: '''echo ${EXT_RELEASE} | sed 's/[~,%@+;:/]//g' ''',
             returnStdout: true).trim()
 
-          env.SEMVER = (new Date()).format('YYYY.MM.dd')
-          def semver = env.EXT_RELEASE_CLEAN =~ /(\d+)\.(\d+)\.(\d+)$/
+          def semver = env.EXT_RELEASE_CLEAN =~ /(\d+)\.(\d+)\.(\d+)/
           if (semver.find()) {
             env.SEMVER = "${semver[0][1]}.${semver[0][2]}.${semver[0][3]}"
           } else {
-            semver = env.EXT_RELEASE_CLEAN =~ /(\d+)\.(\d+)(?:\.(\d+))?(.*)$/
+            semver = env.EXT_RELEASE_CLEAN =~ /(\d+)\.(\d+)(?:\.(\d+))?(.*)/
             if (semver.find()) {
               if (semver[0][3]) {
                 env.SEMVER = "${semver[0][1]}.${semver[0][2]}.${semver[0][3]}"
@@ -143,7 +134,15 @@ pipeline {
             }
           }
 
-          println("SEMVER: ${env.SEMVER}")
+          if (env.SEMVER != null) {
+            if (BRANCH_NAME != "master" && BRANCH_NAME != "main") {
+              env.SEMVER = "${env.SEMVER}-${BRANCH_NAME}"
+            }
+            println("SEMVER: ${env.SEMVER}")
+          } else {
+            println("No SEMVER detected")
+          }
+
         }
       }
     }
@@ -412,10 +411,10 @@ pipeline {
       steps{
         sh '''#! /bin/bash
               set -e
-              PACKAGE_UUID=$(curl -X GET -H "Authorization: Bearer ${SCARF_TOKEN}" https://scarf.sh/api/v1/packages | jq -r '.[] | select(.name=="linuxserver/minetest") | .uuid')
+              PACKAGE_UUID=$(curl -X GET -H "Authorization: Bearer ${SCARF_TOKEN}" https://scarf.sh/api/v1/organizations/linuxserver-ci/packages | jq -r '.[] | select(.name=="linuxserver/minetest") | .uuid')
               if [ -z "${PACKAGE_UUID}" ]; then
                 echo "Adding package to Scarf.sh"
-                PACKAGE_UUID=$(curl -sX POST https://scarf.sh/api/v1/packages \
+                curl -sX POST https://scarf.sh/api/v1/organizations/linuxserver-ci/packages \
                   -H "Authorization: Bearer ${SCARF_TOKEN}" \
                   -H "Content-Type: application/json" \
                   -d '{"name":"linuxserver/minetest",\
@@ -423,22 +422,10 @@ pipeline {
                        "libraryType":"docker",\
                        "website":"https://github.com/linuxserver/docker-minetest",\
                        "backendUrl":"https://ghcr.io/linuxserver/minetest",\
-                       "publicUrl":"https://lscr.io/linuxserver/minetest"}' \
-                  | jq -r .uuid)
+                       "publicUrl":"https://lscr.io/linuxserver/minetest"}' || :
               else
                 echo "Package already exists on Scarf.sh"
               fi
-              echo "Setting permissions on Scarf.sh for package ${PACKAGE_UUID}"
-              curl -X POST https://scarf.sh/api/v1/packages/${PACKAGE_UUID}/permissions \
-                -H "Authorization: Bearer ${SCARF_TOKEN}" \
-                -H "Content-Type: application/json" \
-                -d '[{"userQuery":"Spad","permissionLevel":"admin"},\
-                     {"userQuery":"roxedus","permissionLevel":"admin"},\
-                     {"userQuery":"nemchik","permissionLevel":"admin"},\
-                     {"userQuery":"driz","permissionLevel":"admin"},\
-                     {"userQuery":"aptalca","permissionLevel":"admin"},\
-                     {"userQuery":"saarg","permissionLevel":"admin"},\
-                     {"userQuery":"Stark","permissionLevel":"admin"}]'
            '''
       } 
     }
@@ -762,11 +749,15 @@ pipeline {
                     docker tag ${IMAGE}:${META_TAG} ${PUSHIMAGE}:${META_TAG}
                     docker tag ${PUSHIMAGE}:${META_TAG} ${PUSHIMAGE}:latest
                     docker tag ${PUSHIMAGE}:${META_TAG} ${PUSHIMAGE}:${EXT_RELEASE_TAG}
-                    docker tag ${PUSHIMAGE}:${META_TAG} ${PUSHIMAGE}:${SEMVER}
+                    if [ -n "${SEMVER}" ]; then
+                      docker tag ${PUSHIMAGE}:${META_TAG} ${PUSHIMAGE}:${SEMVER}
+                    fi
                     docker push ${PUSHIMAGE}:latest
                     docker push ${PUSHIMAGE}:${META_TAG}
                     docker push ${PUSHIMAGE}:${EXT_RELEASE_TAG}
-                    docker push ${PUSHIMAGE}:${SEMVER}
+                    if [ -n "${SEMVER}" ]; then
+                     docker push ${PUSHIMAGE}:${SEMVER}
+                    fi
                   done
                '''
           }
@@ -775,8 +766,10 @@ pipeline {
                   docker rmi \
                   ${DELETEIMAGE}:${META_TAG} \
                   ${DELETEIMAGE}:${EXT_RELEASE_TAG} \
-                  ${DELETEIMAGE}:latest \
-                  ${DELETEIMAGE}:${SEMVER} || :
+                  ${DELETEIMAGE}:latest || :
+                  if [ -n "${SEMVER}" ]; then
+                    docker rmi ${DELETEIMAGE}:${SEMVER} || :
+                  fi
                 done
              '''
         }
@@ -826,9 +819,11 @@ pipeline {
                     docker tag ${MANIFESTIMAGE}:amd64-${META_TAG} ${MANIFESTIMAGE}:amd64-${EXT_RELEASE_TAG}
                     docker tag ${MANIFESTIMAGE}:arm32v7-${META_TAG} ${MANIFESTIMAGE}:arm32v7-${EXT_RELEASE_TAG}
                     docker tag ${MANIFESTIMAGE}:arm64v8-${META_TAG} ${MANIFESTIMAGE}:arm64v8-${EXT_RELEASE_TAG}
-                    docker tag ${MANIFESTIMAGE}:amd64-${META_TAG} ${MANIFESTIMAGE}:amd64-${SEMVER}
-                    docker tag ${MANIFESTIMAGE}:arm32v7-${META_TAG} ${MANIFESTIMAGE}:arm32v7-${SEMVER}
-                    docker tag ${MANIFESTIMAGE}:arm64v8-${META_TAG} ${MANIFESTIMAGE}:arm64v8-${SEMVER}
+                    if [ -n "${SEMVER}" ]; then
+                      docker tag ${MANIFESTIMAGE}:amd64-${META_TAG} ${MANIFESTIMAGE}:amd64-${SEMVER}
+                      docker tag ${MANIFESTIMAGE}:arm32v7-${META_TAG} ${MANIFESTIMAGE}:arm32v7-${SEMVER}
+                      docker tag ${MANIFESTIMAGE}:arm64v8-${META_TAG} ${MANIFESTIMAGE}:arm64v8-${SEMVER}
+                    fi
                     docker push ${MANIFESTIMAGE}:amd64-${META_TAG}
                     docker push ${MANIFESTIMAGE}:arm32v7-${META_TAG}
                     docker push ${MANIFESTIMAGE}:arm64v8-${META_TAG}
@@ -838,9 +833,11 @@ pipeline {
                     docker push ${MANIFESTIMAGE}:amd64-${EXT_RELEASE_TAG}
                     docker push ${MANIFESTIMAGE}:arm32v7-${EXT_RELEASE_TAG}
                     docker push ${MANIFESTIMAGE}:arm64v8-${EXT_RELEASE_TAG}
-                    docker push ${MANIFESTIMAGE}:amd64-${SEMVER}
-                    docker push ${MANIFESTIMAGE}:arm32v7-${SEMVER}
-                    docker push ${MANIFESTIMAGE}:arm64v8-${SEMVER}
+                    if [ -n "${SEMVER}" ]; then
+                      docker push ${MANIFESTIMAGE}:amd64-${SEMVER}
+                      docker push ${MANIFESTIMAGE}:arm32v7-${SEMVER}
+                      docker push ${MANIFESTIMAGE}:arm64v8-${SEMVER}
+                    fi
                     docker manifest push --purge ${MANIFESTIMAGE}:latest || :
                     docker manifest create ${MANIFESTIMAGE}:latest ${MANIFESTIMAGE}:amd64-latest ${MANIFESTIMAGE}:arm32v7-latest ${MANIFESTIMAGE}:arm64v8-latest
                     docker manifest annotate ${MANIFESTIMAGE}:latest ${MANIFESTIMAGE}:arm32v7-latest --os linux --arch arm
@@ -853,14 +850,18 @@ pipeline {
                     docker manifest create ${MANIFESTIMAGE}:${EXT_RELEASE_TAG} ${MANIFESTIMAGE}:amd64-${EXT_RELEASE_TAG} ${MANIFESTIMAGE}:arm32v7-${EXT_RELEASE_TAG} ${MANIFESTIMAGE}:arm64v8-${EXT_RELEASE_TAG}
                     docker manifest annotate ${MANIFESTIMAGE}:${EXT_RELEASE_TAG} ${MANIFESTIMAGE}:arm32v7-${EXT_RELEASE_TAG} --os linux --arch arm
                     docker manifest annotate ${MANIFESTIMAGE}:${EXT_RELEASE_TAG} ${MANIFESTIMAGE}:arm64v8-${EXT_RELEASE_TAG} --os linux --arch arm64 --variant v8
-                    docker manifest push --purge ${MANIFESTIMAGE}:${SEMVER} || :
-                    docker manifest create ${MANIFESTIMAGE}:${SEMVER} ${MANIFESTIMAGE}:amd64-${SEMVER} ${MANIFESTIMAGE}:arm32v7-${SEMVER} ${MANIFESTIMAGE}:arm64v8-${SEMVER}
-                    docker manifest annotate ${MANIFESTIMAGE}:${SEMVER} ${MANIFESTIMAGE}:arm32v7-${SEMVER} --os linux --arch arm
-                    docker manifest annotate ${MANIFESTIMAGE}:${SEMVER} ${MANIFESTIMAGE}:arm64v8-${SEMVER} --os linux --arch arm64 --variant v8
+                    if [ -n "${SEMVER}" ]; then
+                      docker manifest push --purge ${MANIFESTIMAGE}:${SEMVER} || :
+                      docker manifest create ${MANIFESTIMAGE}:${SEMVER} ${MANIFESTIMAGE}:amd64-${SEMVER} ${MANIFESTIMAGE}:arm32v7-${SEMVER} ${MANIFESTIMAGE}:arm64v8-${SEMVER}
+                      docker manifest annotate ${MANIFESTIMAGE}:${SEMVER} ${MANIFESTIMAGE}:arm32v7-${SEMVER} --os linux --arch arm
+                      docker manifest annotate ${MANIFESTIMAGE}:${SEMVER} ${MANIFESTIMAGE}:arm64v8-${SEMVER} --os linux --arch arm64 --variant v8
+                    fi
                     docker manifest push --purge ${MANIFESTIMAGE}:latest
                     docker manifest push --purge ${MANIFESTIMAGE}:${META_TAG} 
                     docker manifest push --purge ${MANIFESTIMAGE}:${EXT_RELEASE_TAG} 
-                    docker manifest push --purge ${MANIFESTIMAGE}:${SEMVER} 
+                    if [ -n "${SEMVER}" ]; then
+                      docker manifest push --purge ${MANIFESTIMAGE}:${SEMVER} 
+                    fi
                   done
                '''
           }
@@ -870,15 +871,18 @@ pipeline {
                   ${DELETEIMAGE}:amd64-${META_TAG} \
                   ${DELETEIMAGE}:amd64-latest \
                   ${DELETEIMAGE}:amd64-${EXT_RELEASE_TAG} \
-                  ${DELETEIMAGE}:amd64-${SEMVER} \
                   ${DELETEIMAGE}:arm32v7-${META_TAG} \
                   ${DELETEIMAGE}:arm32v7-latest \
                   ${DELETEIMAGE}:arm32v7-${EXT_RELEASE_TAG} \
-                  ${DELETEIMAGE}:arm32v7-${SEMVER} \
                   ${DELETEIMAGE}:arm64v8-${META_TAG} \
                   ${DELETEIMAGE}:arm64v8-latest \
-                  ${DELETEIMAGE}:arm64v8-${EXT_RELEASE_TAG} \
-                  ${DELETEIMAGE}:arm64v8-${SEMVER} || :
+                  ${DELETEIMAGE}:arm64v8-${EXT_RELEASE_TAG} || :
+                  if [ -n "${SEMVER}" ]; then
+                    docker rmi \
+                    ${DELETEIMAGE}:amd64-${SEMVER} \
+                    ${DELETEIMAGE}:arm32v7-${SEMVER} \
+                    ${DELETEIMAGE}:arm64v8-${SEMVER} || :
+                  fi
                 done
                 docker rmi \
                 ghcr.io/linuxserver/lsiodev-buildcache:arm32v7-${COMMIT_SHA}-${BUILD_NUMBER} \
@@ -907,11 +911,11 @@ pipeline {
              "tagger": {"name": "LinuxServer Jenkins","email": "jenkins@linuxserver.io","date": "'${GITHUB_DATE}'"}}' '''
         echo "Pushing New release for Tag"
         sh '''#! /bin/bash
-              curl -H "Authorization: token ${GITHUB_TOKEN}" -s https://api.github.com/repos/${EXT_USER}/${EXT_REPO}/releases/latest | jq '. |.body' | sed 's:^.\\(.*\\).$:\\1:' > releasebody.json
+              echo "Data change at JSON endpoint ${JSON_URL}" > releasebody.json
               echo '{"tag_name":"'${META_TAG}'",\
                      "target_commitish": "master",\
                      "name": "'${META_TAG}'",\
-                     "body": "**LinuxServer Changes:**\\n\\n'${LS_RELEASE_NOTES}'\\n\\n**'${EXT_REPO}' Changes:**\\n\\n' > start
+                     "body": "**LinuxServer Changes:**\\n\\n'${LS_RELEASE_NOTES}'\\n\\n**Remote Changes:**\\n\\n' > start
               printf '","draft": false,"prerelease": false}' >> releasebody.json
               paste -d'\\0' start releasebody.json > releasebody.json.done
               curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST https://api.github.com/repos/${LS_USER}/${LS_REPO}/releases -d @releasebody.json.done'''
