@@ -57,7 +57,7 @@ RUN \
     lua-socket \
     sqlite \
     sqlite-libs \
-    zstd
+    zstd \
     zstd-libs && \
   echo "**** compile spatialindex ****" && \
   git clone https://github.com/libspatialindex/libspatialindex /tmp/spatialindex && \
