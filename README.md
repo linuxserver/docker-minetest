@@ -228,7 +228,8 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
-* **19.01.21:** - Rebasing to alpine 3.15.
+* **17.03.22:** - Install forked irrlicht, add zstd.
+* **19.01.22:** - Rebasing to alpine 3.15.
 * **02.06.20:** - Rebasing to alpine 3.12.
 * **19.12.19:** - Rebasing to alpine 3.11.
 * **12.07.19:** - Bugfix to support multiple CLI variables.
