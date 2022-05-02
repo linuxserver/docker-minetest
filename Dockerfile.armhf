@@ -28,7 +28,6 @@ RUN \
     gmp-dev \
     hiredis-dev \
     icu-dev \
-    irrlicht-dev \
     jq \
     leveldb-dev \
     libjpeg-turbo-dev \
@@ -43,7 +42,8 @@ RUN \
     ncurses-dev \
     openal-soft-dev \
     python3-dev \
-    sqlite-dev && \
+    sqlite-dev \
+    zstd-dev && \
   echo "**** install runtime packages ****" && \
   apk add --no-cache \
     curl \
@@ -56,12 +56,26 @@ RUN \
     luajit \
     lua-socket \
     sqlite \
-    sqlite-libs && \
+    sqlite-libs \
+    zstd \
+    zstd-libs && \
   echo "**** compile spatialindex ****" && \
   git clone https://github.com/libspatialindex/libspatialindex /tmp/spatialindex && \
   cd /tmp/spatialindex && \
   cmake . \
     -DCMAKE_INSTALL_PREFIX=/usr && \
+  make -j 2 && \
+  make install && \
+  echo "**** compile irrlicht ****" && \
+  mkdir -p /tmp/irrlicht && \
+  IRRLICHT_VER=$(curl -sX GET "https://api.github.com/repos/minetest/irrlicht/releases/latest" \
+    | jq -r .tag_name) && \
+  curl -o /tmp/irrlicht.tar.gz \
+    -L "https://github.com/minetest/irrlicht/archive/${IRRLICHT_VER}.tar.gz" && \
+  tar xf /tmp/irrlicht.tar.gz -C \
+    /tmp/irrlicht --strip-components=1 && \
+  cd /tmp/irrlicht && \
+  cmake . && \
   make -j 2 && \
   make install && \
   echo "**** compile minetestserver ****" && \
