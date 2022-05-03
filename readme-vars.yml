@@ -36,7 +36,7 @@ cap_add_param: false
 # optional container parameters
 opt_param_usage_include_env: true
 opt_param_env_vars:
-  - { env_var: "CLI_ARGS", env_value: "\"--gameid minetest\"", desc: "Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with" }
+  - { env_var: "CLI_ARGS", env_value: "\"--gameid minetest --port 30000\"", desc: "Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with" }
 
 
 # application setup block
@@ -44,11 +44,16 @@ app_setup_block_enabled: true
 app_setup_block: |
   You can find the world maps, mods folder and config files in /config/.minetest.
 
+  If you want to override the advertised port, ensure you add --port in your CLI_ARGS AND ensure the internal port reflects the change, ie;
+  if you set your advertised port to 40000 with --port 40000 then your ports declaration should be 40000:40000/udp
+
+
   Client and server must be the same version, please browse the tags here to pull the appropriate version for your server:
 
   https://hub.docker.com/r/linuxserver/{{ project_name }}/tags
 # changelog
 changelogs:
+  - { date: "02.05.22:", desc: "Allow specifying the advertised port."}
   - { date: "17.03.22:", desc: "Install forked irrlicht, add zstd." }
   - { date: "19.01.22:", desc: "Rebasing to alpine 3.15." }
   - { date: "02.06.20:", desc: "Rebasing to alpine 3.12." }
