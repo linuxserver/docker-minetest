@@ -36,6 +36,7 @@ RUN \
     libressl-dev \
     libtool \
     libvorbis-dev \
+    libxi-dev \
     luajit-dev \
     make \
     mesa-dev \
