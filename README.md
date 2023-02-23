@@ -233,6 +233,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **23.02.23:** - Rebase to Alpine 3.17, migrate to s6v3.
 * **06.08.22:** - Update irrlicht deps.
 * **02.05.22:** - Allow specifying the advertised port.
 * **17.03.22:** - Install forked irrlicht, add zstd.
