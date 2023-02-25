@@ -53,6 +53,7 @@ app_setup_block: |
   https://hub.docker.com/r/linuxserver/{{ project_name }}/tags
 # changelog
 changelogs:
+  - { date: "23.02.23:", desc: "Rebase to Alpine 3.17, migrate to s6v3."}
   - { date: "06.08.22:", desc: "Update irrlicht deps."}
   - { date: "02.05.22:", desc: "Allow specifying the advertised port."}
   - { date: "17.03.22:", desc: "Install forked irrlicht, add zstd." }
