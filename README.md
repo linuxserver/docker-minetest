@@ -87,7 +87,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - "CLI_ARGS="--gameid minetest --port 30000"" #optional
+      - CLI_ARGS=--gameid minetest --port 30000 #optional
     volumes:
       - /path/to/data:/config/.minetest
     ports:
