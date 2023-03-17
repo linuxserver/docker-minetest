@@ -36,7 +36,7 @@ cap_add_param: false
 # optional container parameters
 opt_param_usage_include_env: true
 opt_param_env_vars:
-  - { env_var: "CLI_ARGS", env_value: "\"--gameid minetest --port 30000\"", desc: "Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with" }
+  - { env_var: "CLI_ARGS", env_value: "--gameid minetest --port 30000", desc: "Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with" }
 
 
 # application setup block
@@ -53,6 +53,7 @@ app_setup_block: |
   https://hub.docker.com/r/linuxserver/{{ project_name }}/tags
 # changelog
 changelogs:
+  - { date: "17.03.23:", desc: "Fix CLI_ARGS example in readme."}
   - { date: "23.02.23:", desc: "Rebase to Alpine 3.17, migrate to s6v3."}
   - { date: "06.08.22:", desc: "Update irrlicht deps."}
   - { date: "02.05.22:", desc: "Allow specifying the advertised port."}

@@ -87,7 +87,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - "CLI_ARGS="--gameid minetest --port 30000"" #optional
+      - "CLI_ARGS=--gameid minetest --port 30000" #optional
     volumes:
       - /path/to/data:/config/.minetest
     ports:
@@ -103,7 +103,7 @@ docker run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Etc/UTC \
-  -e CLI_ARGS=""--gameid minetest --port 30000"" `#optional` \
+  -e CLI_ARGS="--gameid minetest --port 30000" `#optional` \
   -p 30000:30000/udp \
   -v /path/to/data:/config/.minetest \
   --restart unless-stopped \
@@ -121,7 +121,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-e TZ=Etc/UTC` | specify a timezone to use, see this [list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). |
-| `-e CLI_ARGS="--gameid minetest --port 30000"` | Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with |
+| `-e CLI_ARGS=--gameid minetest --port 30000` | Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with |
 | `-v /config/.minetest` | Where minetest stores config files and maps etc. |
 
 ## Environment variables from files (Docker secrets)
@@ -233,6 +233,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **17.03.23:** - Fix CLI_ARGS example in readme.
 * **23.02.23:** - Rebase to Alpine 3.17, migrate to s6v3.
 * **06.08.22:** - Update irrlicht deps.
 * **02.05.22:** - Allow specifying the advertised port.
