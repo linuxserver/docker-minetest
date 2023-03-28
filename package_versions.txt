@@ -48,7 +48,7 @@ snappy                  1.1.9-r4               apk
 sqlite                  3.40.1-r0              apk     
 sqlite-libs             3.40.1-r0              apk     
 ssl_client              1.35.0-r29             apk     
-tzdata                  2022f-r1               apk     
+tzdata                  2023b-r1               apk     
 utmps-libs              0.1.2.0-r1             apk     
 xz                      5.2.9-r0               apk     
 xz-libs                 5.2.9-r0               apk     
