@@ -53,6 +53,7 @@ app_setup_block: |
   https://hub.docker.com/r/linuxserver/{{ project_name }}/tags
 # changelog
 changelogs:
+  - { date: "09.04.23:", desc: "Build logic changes to copy devtest to default games."}
   - { date: "17.03.23:", desc: "Fix CLI_ARGS example in readme."}
   - { date: "23.02.23:", desc: "Rebase to Alpine 3.17, migrate to s6v3."}
   - { date: "06.08.22:", desc: "Update irrlicht deps."}

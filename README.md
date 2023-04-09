@@ -233,6 +233,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **09.04.23:** - Build logic changes to copy devtest to default games.
 * **17.03.23:** - Fix CLI_ARGS example in readme.
 * **23.02.23:** - Rebase to Alpine 3.17, migrate to s6v3.
 * **06.08.22:** - Update irrlicht deps.
