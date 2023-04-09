@@ -68,7 +68,7 @@ RUN \
   cd /tmp/spatialindex && \
   cmake . \
     -DCMAKE_INSTALL_PREFIX=/usr && \
-  make -j 2 && \
+  make -j 4 && \
   make install && \
   echo "**** compile irrlicht ****" && \
   mkdir -p /tmp/irrlicht && \
@@ -80,7 +80,7 @@ RUN \
     /tmp/irrlicht --strip-components=1 && \
   cd /tmp/irrlicht && \
   cmake . && \
-  make -j 2 && \
+  make -j 4 && \
   make install && \
   echo "**** compile minetestserver ****" && \
   if [ -z ${MINETEST_RELEASE+x} ]; then \
@@ -113,12 +113,12 @@ RUN \
     -DENABLE_SOUND=0 \
     -DENABLE_SYSTEM_GMP=1 \
     -DRUN_IN_PLACE=0 && \
-  make -j 2 && \
+  make -j 4 && \
   make install && \
   echo "**** copy games to temporary folder ****" && \
   mkdir -p \
     /defaults/games && \
-  cp -pr  /usr/share/minetest/games/* /defaults/games/ && \
+  cp -pr  /tmp/minetest/games/* /defaults/games/ && \
   echo "**** split after 3rd dot if it exists in minetest tag variable ****" && \
   echo "**** so we fetch game version x.x.x etc ****" && \
   if [ $(echo "$MINETEST_RELEASE" | tr -cd '.' | wc -c) = 3 ]; then \
