@@ -12,7 +12,7 @@ busybox-binsh           1.35.0-r29             apk
 ca-certificates         20230506-r0            apk     
 ca-certificates-bundle  20230506-r0            apk     
 coreutils               9.1-r0                 apk     
-curl                    8.1.1-r1               apk     
+curl                    8.1.2-r0               apk     
 gmp                     6.2.1-r2               apk     
 hiredis                 1.0.2-r1               apk     
 jq                      1.6-r2                 apk     
