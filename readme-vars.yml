@@ -46,6 +46,7 @@ app_setup_block: |
   https://hub.docker.com/r/linuxserver/{{ project_name }}/tags
 # changelog
 changelogs:
+  - {date: "12.07.23:", desc: "Rebase to Alpine 3.18."}
   - {date: "06.07.23:", desc: "Deprecate armhf. As announced [here](https://www.linuxserver.io/blog/a-farewell-to-arm-hf)"}
   - {date: "09.04.23:", desc: "Build logic changes to copy devtest to default games."}
   - {date: "17.03.23:", desc: "Fix CLI_ARGS example in readme."}
