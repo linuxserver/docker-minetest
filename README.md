@@ -64,10 +64,13 @@ You can find the world maps, mods folder and config files in /config/.minetest.
 If you want to override the advertised port, ensure you add --port in your CLI_ARGS AND ensure the internal port reflects the change, ie;
 if you set your advertised port to 40000 with --port 40000 then your ports declaration should be 40000:40000/udp
 
-
 Client and server must be the same version, please browse the tags here to pull the appropriate version for your server:
 
 https://hub.docker.com/r/linuxserver/minetest/tags
+
+### Bundled Games
+
+As per [upstream request](https://github.com/minetest/minetest/releases/tag/5.8.0) this image no longer includes [minetest_game](https://github.com/minetest/minetest_game), so if required you will need to either install via ContentDB or download it from their repo and copy to `/config/.minetest/games/minetest`
 
 ## Usage
 
@@ -298,6 +301,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **12.07.23:** - Rebase to Alpine 3.18, remove minetest_game.
 * **06.07.23:** - Deprecate armhf. As announced [here](https://www.linuxserver.io/blog/a-farewell-to-arm-hf)
 * **09.04.23:** - Build logic changes to copy devtest to default games.
 * **17.03.23:** - Fix CLI_ARGS example in readme.

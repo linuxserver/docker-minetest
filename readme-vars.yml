@@ -40,12 +40,16 @@ app_setup_block: |
   If you want to override the advertised port, ensure you add --port in your CLI_ARGS AND ensure the internal port reflects the change, ie;
   if you set your advertised port to 40000 with --port 40000 then your ports declaration should be 40000:40000/udp
 
-
   Client and server must be the same version, please browse the tags here to pull the appropriate version for your server:
 
   https://hub.docker.com/r/linuxserver/{{ project_name }}/tags
+
+  ### Bundled Games
+
+  As per [upstream request](https://github.com/minetest/minetest/releases/tag/5.8.0) this image no longer includes [minetest_game](https://github.com/minetest/minetest_game), so if required you will need to either install via ContentDB or download it from their repo and copy to `/config/.minetest/games/minetest`
 # changelog
 changelogs:
+  - {date: "12.07.23:", desc: "Rebase to Alpine 3.18, remove minetest_game."}
   - {date: "06.07.23:", desc: "Deprecate armhf. As announced [here](https://www.linuxserver.io/blog/a-farewell-to-arm-hf)"}
   - {date: "09.04.23:", desc: "Build logic changes to copy devtest to default games."}
   - {date: "17.03.23:", desc: "Fix CLI_ARGS example in readme."}
