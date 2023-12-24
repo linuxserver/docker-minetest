@@ -49,6 +49,7 @@ app_setup_block: |
   As per [upstream request](https://github.com/minetest/minetest/releases/tag/5.8.0) this image no longer includes [minetest_game](https://github.com/minetest/minetest_game), so if required you will need to either install via ContentDB or download it from their repo and copy to `/config/.minetest/games/minetest`
 # changelog
 changelogs:
+  - { date: "23.12.23:", desc: "Rebase to Alpine 3.19."}
   - {date: "12.07.23:", desc: "Rebase to Alpine 3.18, remove minetest_game."}
   - {date: "06.07.23:", desc: "Deprecate armhf. As announced [here](https://www.linuxserver.io/blog/a-farewell-to-arm-hf)"}
   - {date: "09.04.23:", desc: "Build logic changes to copy devtest to default games."}
