@@ -32,6 +32,7 @@ RUN \
     libjpeg-turbo-dev \
     libogg-dev \
     libpng-dev \
+    libpq-dev \
     openssl-dev \
     libtool \
     libvorbis-dev \
@@ -50,6 +51,7 @@ RUN \
     leveldb \
     libgcc \
     libintl \
+    libpq \
     libstdc++ \
     luajit \
     lua-socket \
@@ -109,6 +111,9 @@ RUN \
     -DENABLE_GETTEXT=0 \
     -DENABLE_LEVELDB=1 \
     -DENABLE_LUAJIT=1 \
+    -DENABLE_POSTGRESQL=1 \
+    -DPostgreSQL_INCLUDE_DIR="/usr/include/postgresql" \
+    -DPostgreSQL_LIBRARY="/usr/lib/libpq.so" \
     -DENABLE_REDIS=1 \
     -DENABLE_SOUND=0 \
     -DENABLE_SYSTEM_GMP=1 \
