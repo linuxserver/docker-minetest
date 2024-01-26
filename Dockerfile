@@ -41,6 +41,7 @@ RUN \
     ncurses-dev \
     openal-soft-dev \
     python3-dev \
+    sdl2-dev \
     sqlite-dev \
     zstd-dev && \
   echo "**** install runtime packages ****" && \
@@ -53,6 +54,7 @@ RUN \
     libstdc++ \
     luajit \
     lua-socket \
+    sdl2 \
     sqlite \
     sqlite-libs \
     zstd \
@@ -75,7 +77,7 @@ RUN \
   IRRLICHT_VER=$(curl -sX GET "https://api.github.com/repos/minetest/irrlicht/releases/latest" \
     | jq -r .tag_name) && \
   curl -o /tmp/irrlicht.tar.gz \
-    -L "https://github.com/minetest/irrlicht/archive/${IRRLICHT_VER}.tar.gz" && \
+    -L "https://github.com/minetest/irrlicht/archive/9df2f0b9446799f9e6c67909f4bdda5cb8cd07ad.tar.gz" && \
   tar xf /tmp/irrlicht.tar.gz -C \
     /tmp/irrlicht --strip-components=1 && \
   cd /tmp/irrlicht && \

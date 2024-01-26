@@ -285,6 +285,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **26.01.24:** - Temporaroly pin irrlicht to continue building pending a bugfix release.
 * **23.12.23:** - Rebase to Alpine 3.19.
 * **12.07.23:** - Rebase to Alpine 3.18, remove minetest_game.
 * **06.07.23:** - Deprecate armhf. As announced [here](https://www.linuxserver.io/blog/a-farewell-to-arm-hf)
