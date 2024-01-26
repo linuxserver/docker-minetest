@@ -20,28 +20,22 @@ RUN \
   echo "**** install build packages ****" && \
   apk add --no-cache --virtual=build-dependencies \
     build-base \
-    bzip2-dev \
     cmake \
     curl-dev \
-    doxygen \
-    gettext-dev \
+    freetype-dev \
+    gettext \
     gmp-dev \
-    hiredis-dev \
-    icu-dev \
-    leveldb-dev \
-    libjpeg-turbo-dev \
+    jpeg-dev \
+    jsoncpp-dev \
     libogg-dev \
     libpng-dev \
-    openssl-dev \
-    libtool \
     libvorbis-dev \
     libxi-dev \
     luajit-dev \
     mesa-dev \
-    ncurses-dev \
     openal-soft-dev \
-    python3-dev \
     sqlite-dev \
+    zlib-dev \
     zstd-dev && \
   echo "**** install runtime packages ****" && \
   apk add --no-cache \
@@ -79,7 +73,8 @@ RUN \
   tar xf /tmp/irrlicht.tar.gz -C \
     /tmp/irrlicht --strip-components=1 && \
   cd /tmp/irrlicht && \
-  cmake . && \
+  cmake . \
+    -DUSE_SDL2=0 && \
   make -j 4 && \
   make install && \
   echo "**** compile minetestserver ****" && \
