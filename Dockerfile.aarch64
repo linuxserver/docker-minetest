@@ -40,6 +40,7 @@ RUN \
     mesa-dev \
     ncurses-dev \
     openal-soft-dev \
+    postgresql-dev \
     python3-dev \
     sdl2-dev \
     sqlite-dev \
@@ -51,6 +52,7 @@ RUN \
     leveldb \
     libgcc \
     libintl \
+    libpq \
     libstdc++ \
     luajit \
     lua-socket \
@@ -61,7 +63,7 @@ RUN \
     zstd-libs && \
   echo "**** compile spatialindex ****" && \
   mkdir -p /tmp/spatialindex && \
-  SPATIAL_VER=$(curl -sX GET "https://api.github.com/repos/libspatialindex/libspatialindex/commits/master" \
+  SPATIAL_VER=$(curl -sX GET "https://api.github.com/repos/libspatialindex/libspatialindex/commits/main" \
     | jq -r .sha) && \
   curl -o /tmp/spatialindex.tar.gz \
     -L "https://github.com/libspatialindex/libspatialindex/archive/${SPATIAL_VER}.tar.gz" && \
@@ -111,6 +113,7 @@ RUN \
     -DENABLE_GETTEXT=0 \
     -DENABLE_LEVELDB=1 \
     -DENABLE_LUAJIT=1 \
+    -DENABLE_POSTGRESQL=1 \
     -DENABLE_REDIS=1 \
     -DENABLE_SOUND=0 \
     -DENABLE_SYSTEM_GMP=1 \
