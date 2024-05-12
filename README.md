@@ -88,9 +88,9 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - "CLI_ARGS=--gameid minetest --port 30000" #optional
+      - "CLI_ARGS=--gameid devtest" #optional
     volumes:
-      - /path/to/data:/config/.minetest
+      - /path/to/minetest/data:/config/.minetest
     ports:
       - 30000:30000/udp
     restart: unless-stopped
@@ -104,9 +104,9 @@ docker run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Etc/UTC \
-  -e CLI_ARGS="--gameid minetest --port 30000" `#optional` \
+  -e CLI_ARGS="--gameid devtest" `#optional` \
   -p 30000:30000/udp \
-  -v /path/to/data:/config/.minetest \
+  -v /path/to/minetest/data:/config/.minetest \
   --restart unless-stopped \
   lscr.io/linuxserver/minetest:latest
 ```
@@ -117,11 +117,11 @@ Containers are configured using parameters passed at runtime (such as those abov
 
 | Parameter | Function |
 | :----: | --- |
-| `-p 30000/udp` | Port Minetest listens on. |
+| `-p 30000/udp` | Port Minetest listens on (UDP). |
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-e TZ=Etc/UTC` | specify a timezone to use, see this [list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). |
-| `-e CLI_ARGS=--gameid minetest --port 30000` | Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with |
+| `-e CLI_ARGS=--gameid devtest` | Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with |
 | `-v /config/.minetest` | Where minetest stores config files and maps etc. |
 
 ## Environment variables from files (Docker secrets)
@@ -285,7 +285,9 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
-* **26.01.24:** - Temporaroly pin irrlicht to continue building pending a bugfix release.
+* **12.05.24:** - Unpin irrlicht, enable IPv6 support in default conf.
+* **10.05.24:** - Enable PostgreSQL backend and fix libspatialindex branch name.
+* **26.01.24:** - Temporarily pin irrlicht to continue building pending a bugfix release.
 * **23.12.23:** - Rebase to Alpine 3.19.
 * **12.07.23:** - Rebase to Alpine 3.18, remove minetest_game.
 * **06.07.23:** - Deprecate armhf. As announced [here](https://www.linuxserver.io/blog/a-farewell-to-arm-hf)
