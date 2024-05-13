@@ -41,6 +41,7 @@ RUN \
     ncurses-dev \
     openal-soft-dev \
     python3-dev \
+    postgresql-dev \
     sdl2-dev \
     sqlite-dev \
     zstd-dev && \
@@ -51,6 +52,7 @@ RUN \
     leveldb \
     libgcc \
     libintl \
+    libpq \
     libstdc++ \
     luajit \
     lua-socket \
@@ -61,7 +63,7 @@ RUN \
     zstd-libs && \
   echo "**** compile spatialindex ****" && \
   mkdir -p /tmp/spatialindex && \
-  SPATIAL_VER=$(curl -sX GET "https://api.github.com/repos/libspatialindex/libspatialindex/commits/master" \
+  SPATIAL_VER=$(curl -sX GET "https://api.github.com/repos/libspatialindex/libspatialindex/commits/main" \
     | jq -r .sha) && \
   curl -o /tmp/spatialindex.tar.gz \
     -L "https://github.com/libspatialindex/libspatialindex/archive/${SPATIAL_VER}.tar.gz" && \
@@ -77,7 +79,7 @@ RUN \
   IRRLICHT_VER=$(curl -sX GET "https://api.github.com/repos/minetest/irrlicht/releases/latest" \
     | jq -r .tag_name) && \
   curl -o /tmp/irrlicht.tar.gz \
-    -L "https://github.com/minetest/irrlicht/archive/9df2f0b9446799f9e6c67909f4bdda5cb8cd07ad.tar.gz" && \
+    -L "https://github.com/minetest/irrlicht/archive/${IRRLICHT_VER}.tar.gz" && \
   tar xf /tmp/irrlicht.tar.gz -C \
     /tmp/irrlicht --strip-components=1 && \
   cd /tmp/irrlicht && \
@@ -97,6 +99,8 @@ RUN \
   tar xf \
   /tmp/minetest-src.tar.gz -C \
     /tmp/minetest --strip-components=1 && \
+  sed -i 's/# enable_ipv6 = true/enable_ipv6 = true/' /tmp/minetest/minetest.conf.example && \
+  sed -i 's/# ipv6_server = false/ipv6_server = true/' /tmp/minetest/minetest.conf.example && \
   cp /tmp/minetest/minetest.conf.example /defaults/minetest.conf && \
   cd /tmp/minetest && \
   cmake . \
@@ -111,6 +115,7 @@ RUN \
     -DENABLE_GETTEXT=0 \
     -DENABLE_LEVELDB=1 \
     -DENABLE_LUAJIT=1 \
+    -DENABLE_POSTGRESQL=1 \
     -DENABLE_REDIS=1 \
     -DENABLE_SOUND=0 \
     -DENABLE_SYSTEM_GMP=1 \

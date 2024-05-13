@@ -16,22 +16,18 @@ development_versions: false
 # container parameters
 common_param_env_vars_enabled: true
 param_container_name: "{{ project_name }}"
-param_usage_include_net: false
-param_usage_include_env: true
-param_env_vars:
-  - {env_var: "TZ", env_value: "Europe/London", desc: "Specify a timezone to use EG Europe/London."}
+
 param_usage_include_vols: true
 param_volumes:
-  - {vol_path: "/config/.minetest", vol_host_path: "/path/to/data", desc: "Where minetest stores config files and maps etc."}
+  - {vol_path: "/config/.minetest", vol_host_path: "/path/to/minetest/data", desc: "Where minetest stores config files and maps etc."}
 param_usage_include_ports: true
 param_ports:
-  - {external_port: "30000", internal_port: "30000/udp", port_desc: "Port Minetest listens on."}
-param_device_map: false
-cap_add_param: false
+  - {external_port: "30000", internal_port: "30000/udp", port_desc: "Port Minetest listens on (UDP)."}
+
 # optional container parameters
 opt_param_usage_include_env: true
 opt_param_env_vars:
-  - {env_var: "CLI_ARGS", env_value: "--gameid minetest --port 30000", desc: "Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with"}
+  - {env_var: "CLI_ARGS", env_value: "--gameid devtest", desc: "Optionally specify any [CLI variables](https://wiki.minetest.net/Command_line) you want to launch the app with"}
 # application setup block
 app_setup_block_enabled: true
 app_setup_block: |
@@ -49,7 +45,9 @@ app_setup_block: |
   As per [upstream request](https://github.com/minetest/minetest/releases/tag/5.8.0) this image no longer includes [minetest_game](https://github.com/minetest/minetest_game), so if required you will need to either install via ContentDB or download it from their repo and copy to `/config/.minetest/games/minetest`
 # changelog
 changelogs:
-  - {date: "26.01.24:", desc: "Temporaroly pin irrlicht to continue building pending a bugfix release."}
+  - {date: "12.05.24:", desc: "Unpin irrlicht, enable IPv6 support in default conf."}
+  - {date: "10.05.24:", desc: "Enable PostgreSQL backend and fix libspatialindex branch name."}
+  - {date: "26.01.24:", desc: "Temporarily pin irrlicht to continue building pending a bugfix release."}
   - {date: "23.12.23:", desc: "Rebase to Alpine 3.19."}
   - {date: "12.07.23:", desc: "Rebase to Alpine 3.18, remove minetest_game."}
   - {date: "06.07.23:", desc: "Deprecate armhf. As announced [here](https://www.linuxserver.io/blog/a-farewell-to-arm-hf)"}
