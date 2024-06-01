@@ -285,6 +285,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **01.06.24:** - Rebase to Alpine 3.20.
 * **12.05.24:** - Unpin irrlicht, enable IPv6 support in default conf.
 * **10.05.24:** - Enable PostgreSQL backend and fix libspatialindex branch name.
 * **26.01.24:** - Temporarily pin irrlicht to continue building pending a bugfix release.

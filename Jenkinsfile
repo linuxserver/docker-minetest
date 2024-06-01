@@ -33,8 +33,8 @@ pipeline {
     CI_PORT='80'
     CI_SSL='false'
     CI_DELAY='120'
-    CI_DOCKERENV='TZ=Europe/London|CLI_ARGS=--gameid devtest'
-    CI_AUTH='user:password'
+    CI_DOCKERENV='CLI_ARGS=--gameid devtest'
+    CI_AUTH=''
     CI_WEBPATH=''
   }
   stages {
