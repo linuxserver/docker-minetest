@@ -25,7 +25,7 @@ leveldb                 1.23-r0                apk
 libacl                  2.3.2-r0               apk     
 libattr                 2.5.2-r0               apk     
 libbsd                  0.12.2-r0              apk     
-libcrypto3              3.3.1-r0               apk     
+libcrypto3              3.3.1-r1               apk     
 libcurl                 8.8.0-r0               apk     
 libgcc                  13.2.1_git20240309-r0  apk     
 libidn2                 2.3.7-r0               apk     
@@ -35,7 +35,7 @@ libncursesw             6.4_p20240420-r0       apk
 libpq                   16.3-r0                apk     
 libproc2                4.0.4-r0               apk     
 libpsl                  0.21.5-r1              apk     
-libssl3                 3.3.1-r0               apk     
+libssl3                 3.3.1-r1               apk     
 libstdc++               13.2.1_git20240309-r0  apk     
 libunistring            1.2-r0                 apk     
 linux-pam               1.6.0-r0               apk     
