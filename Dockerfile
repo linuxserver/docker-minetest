@@ -11,7 +11,7 @@ LABEL maintainer="aptalca"
 
 # environment variables
 ENV HOME="/config" \
-  MINETEST_SUBGAME_PATH="/config/.minetest/games"
+  MINETEST_GAME_PATH="/config/.minetest/games"
 
 # build variables
 ARG LDFLAGS="-lintl"
