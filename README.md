@@ -72,6 +72,7 @@ https://hub.docker.com/r/linuxserver/minetest/tags
 
 As per [upstream request](https://github.com/minetest/minetest/releases/tag/5.8.0) this image no longer includes [minetest_game](https://github.com/minetest/minetest_game), so if required you will need to either install via ContentDB or download it from their repo and copy to `/config/.minetest/games/minetest`
 
+ 
 ## Usage
 
 To help you get started creating a container from this image you can either use docker-compose or the docker cli.
@@ -276,10 +277,10 @@ docker build \
   -t lscr.io/linuxserver/minetest:latest .
 ```
 
-The ARM variants can be built on x86_64 hardware using `multiarch/qemu-user-static`
+The ARM variants can be built on x86_64 hardware and vice versa using `lscr.io/linuxserver/qemu-static`
 
 ```bash
-docker run --rm --privileged multiarch/qemu-user-static:register --reset
+docker run --rm --privileged lscr.io/linuxserver/qemu-static --reset
 ```
 
 Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64`.
