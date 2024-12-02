@@ -72,10 +72,12 @@ https://hub.docker.com/r/linuxserver/minetest/tags
 
 As per [upstream request](https://github.com/minetest/minetest/releases/tag/5.8.0) this image no longer includes [minetest_game](https://github.com/minetest/minetest_game), so if required you will need to either install via ContentDB or download it from their repo and copy to `/config/.minetest/games/minetest`
 
- 
 ## Usage
 
 To help you get started creating a container from this image you can either use docker-compose or the docker cli.
+
+>[!NOTE]
+>Unless a parameter is flaged as 'optional', it is *mandatory* and a value must be provided.
 
 ### docker-compose (recommended, [click here for more info](https://docs.linuxserver.io/general/docker-compose))
 
@@ -118,7 +120,7 @@ Containers are configured using parameters passed at runtime (such as those abov
 
 | Parameter | Function |
 | :----: | --- |
-| `-p 30000/udp` | Port Minetest listens on (UDP). |
+| `-p 30000:30000/udp` | Port Minetest listens on (UDP). |
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-e TZ=Etc/UTC` | specify a timezone to use, see this [list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). |
@@ -287,6 +289,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **25.11.24:** - Add Prometheus metrics support.
 * **01.06.24:** - Rebase to Alpine 3.20.
 * **12.05.24:** - Unpin irrlicht, enable IPv6 support in default conf.
 * **10.05.24:** - Enable PostgreSQL backend and fix libspatialindex branch name.
