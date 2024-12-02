@@ -11,18 +11,15 @@ project_blurb_optional_extras_enabled: false
 available_architectures:
   - {arch: "{{ arch_x86_64 }}", tag: "amd64-latest"}
   - {arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
-
 # container parameters
 common_param_env_vars_enabled: true
 param_container_name: "{{ project_name }}"
-
 param_usage_include_vols: true
 param_volumes:
   - {vol_path: "/config/.minetest", vol_host_path: "/path/to/{{ project_name }}/data", desc: "Where minetest stores config files and maps etc."}
 param_usage_include_ports: true
 param_ports:
   - {external_port: "30000", internal_port: "30000/udp", port_desc: "Port Minetest listens on (UDP)."}
-
 # optional container parameters
 opt_param_usage_include_env: true
 opt_param_env_vars:
@@ -42,6 +39,49 @@ app_setup_block: |
   ### Bundled Games
 
   As per [upstream request](https://github.com/minetest/minetest/releases/tag/5.8.0) this image no longer includes [minetest_game](https://github.com/minetest/minetest_game), so if required you will need to either install via ContentDB or download it from their repo and copy to `/config/.minetest/games/minetest`
+# init diagram
+init_diagram: |
+  "minetest:latest": {
+    docker-mods
+    base {
+      fix-attr +\nlegacy cont-init
+    }
+    docker-mods -> base
+    legacy-services
+    custom services
+    init-services -> legacy-services
+    init-services -> custom services
+    custom services -> legacy-services
+    legacy-services -> ci-service-check
+    init-migrations -> init-adduser
+    init-os-end -> init-config
+    init-config -> init-config-end
+    init-minetest-config -> init-config-end
+    init-os-end -> init-crontab-config
+    init-mods-end -> init-custom-files
+    base -> init-envfile
+    base -> init-migrations
+    init-config -> init-minetest-config
+    base -> init-mods
+    init-config-end -> init-mods
+    init-mods -> init-mods-end
+    init-mods-package-install -> init-mods-end
+    init-mods -> init-mods-package-install
+    base -> init-os-end
+    init-adduser -> init-os-end
+    init-envfile -> init-os-end
+    init-migrations -> init-os-end
+    init-custom-files -> init-services
+    init-mods-end -> init-services
+    init-services -> svc-cron
+    svc-cron -> legacy-services
+    init-services -> svc-minetest
+    svc-minetest -> legacy-services
+  }
+  Base Images: {
+    "baseimage-alpine:3.20"
+  }
+  "minetest:latest" <- Base Images
 # changelog
 changelogs:
   - {date: "25.11.24:", desc: "Add Prometheus metrics support."}
