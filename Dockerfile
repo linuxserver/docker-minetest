@@ -61,6 +61,21 @@ RUN \
     sqlite-libs \
     zstd \
     zstd-libs && \
+  echo "**** compile prometheus-cpp ****" && \
+  mkdir -p /tmp/prometheus-cpp && \
+  PROM_URL=$(curl -sX GET "https://api.github.com/repos/jupp0r/prometheus-cpp/releases/latest" \
+    | jq -r .assets[].browser_download_url) && \
+  curl -o /tmp/prometheus-cpp.tar.gz \
+    -L "$PROM_URL" && \
+  tar xf /tmp/prometheus-cpp.tar.gz -C \
+    /tmp/prometheus-cpp --strip-components=1 && \
+  cd /tmp/prometheus-cpp && \
+  mkdir build && \
+  cd build && \
+  cmake .. \
+    -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_TESTING=0 && \
+  make -j 4 && \
+  make install && \
   echo "**** compile spatialindex ****" && \
   mkdir -p /tmp/spatialindex && \
   SPATIAL_VER=$(curl -sX GET "https://api.github.com/repos/libspatialindex/libspatialindex/commits/main" \
@@ -116,6 +131,7 @@ RUN \
     -DENABLE_LEVELDB=1 \
     -DENABLE_LUAJIT=1 \
     -DENABLE_POSTGRESQL=1 \
+    -DENABLE_PROMETHEUS=1 \
     -DENABLE_REDIS=1 \
     -DENABLE_SOUND=0 \
     -DENABLE_SYSTEM_GMP=1 \

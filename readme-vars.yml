@@ -44,6 +44,7 @@ app_setup_block: |
   As per [upstream request](https://github.com/minetest/minetest/releases/tag/5.8.0) this image no longer includes [minetest_game](https://github.com/minetest/minetest_game), so if required you will need to either install via ContentDB or download it from their repo and copy to `/config/.minetest/games/minetest`
 # changelog
 changelogs:
+  - {date: "25.11.24:", desc: "Add Prometheus metrics support."}
   - {date: "01.06.24:", desc: "Rebase to Alpine 3.20."}
   - {date: "12.05.24:", desc: "Unpin irrlicht, enable IPv6 support in default conf."}
   - {date: "10.05.24:", desc: "Enable PostgreSQL backend and fix libspatialindex branch name."}
