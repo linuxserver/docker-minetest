@@ -7,7 +7,7 @@ release_type: stable
 release_tag: latest
 ls_branch: master
 repo_vars:
-  - JSON_URL = 'https://api.github.com/repos/minetest/minetest/releases'
+  - JSON_URL = 'https://api.github.com/repos/luanti-org/luanti/releases'
   - JSON_PATH = 'first(.[] | select(.tag_name | contains("android") | not)) | .tag_name'
   - BUILD_VERSION_ARG = 'MINETEST_RELEASE'
   - LS_USER = 'linuxserver'

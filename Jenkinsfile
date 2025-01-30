@@ -19,7 +19,7 @@ pipeline {
     DOCKERHUB_TOKEN=credentials('docker-hub-ci-pat')
     QUAYIO_API_TOKEN=credentials('quayio-repo-api-token')
     GIT_SIGNING_KEY=credentials('484fbca6-9a4f-455e-b9e3-97ac98785f5f')
-    JSON_URL = 'https://api.github.com/repos/minetest/minetest/releases'
+    JSON_URL = 'https://api.github.com/repos/luanti-org/luanti/releases'
     JSON_PATH = 'first(.[] | select(.tag_name | contains("android") | not)) | .tag_name'
     BUILD_VERSION_ARG = 'MINETEST_RELEASE'
     LS_USER = 'linuxserver'
@@ -58,11 +58,21 @@ pipeline {
       steps{
         echo "Running on node: ${NODE_NAME}"
         sh '''#! /bin/bash
-              containers=$(docker ps -aq)
+              echo "Pruning builder"
+              docker builder prune -f --builder container || :
+              containers=$(docker ps -q)
               if [[ -n "${containers}" ]]; then
-                docker stop ${containers}
+                BUILDX_CONTAINER_ID=$(docker ps -qf 'name=buildx_buildkit')
+                for container in ${containers}; do
+                  if [[ "${container}" == "${BUILDX_CONTAINER_ID}" ]]; then
+                    echo "skipping buildx container in docker stop"
+                  else
+                    echo "Stopping container ${container}"
+                    docker stop ${container}
+                  fi
+                done
               fi
-              docker system prune -af --volumes || : '''
+              docker system prune -f --volumes || : '''
         script{
           env.EXIT_STATUS = ''
           env.LS_RELEASE = sh(
@@ -1154,12 +1164,21 @@ EOF
     }
     cleanup {
       sh '''#! /bin/bash
-            echo "Performing docker system prune!!"
-            containers=$(docker ps -aq)
+            echo "Pruning builder!!"
+            docker builder prune -f --builder container || :
+            containers=$(docker ps -q)
             if [[ -n "${containers}" ]]; then
-              docker stop ${containers}
+              BUILDX_CONTAINER_ID=$(docker ps -qf 'name=buildx_buildkit')
+              for container in ${containers}; do
+                if [[ "${container}" == "${BUILDX_CONTAINER_ID}" ]]; then
+                  echo "skipping buildx container in docker stop"
+                else
+                  echo "Stopping container ${container}"
+                  docker stop ${container}
+                fi
+              done
             fi
-            docker system prune -af --volumes || :
+            docker system prune -f --volumes || :
          '''
       cleanWs()
     }
